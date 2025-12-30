@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ResourceSpawner : MonoBehaviour
+public class Game : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
