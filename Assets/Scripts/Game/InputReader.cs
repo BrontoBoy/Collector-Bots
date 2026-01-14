@@ -6,7 +6,6 @@ public class InputReader : MonoBehaviour
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(MouseButtonIndex))
-            IsAttack = true;
+        //if (Input.GetMouseButtonDown(MouseButtonIndex))
     }
 }
