@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Scanner : MonoBehaviour
@@ -10,8 +9,21 @@ public class Scanner : MonoBehaviour
 
     public event Action<Resource> ResourceFound;
     
-    public float Delay => _delay;
-
+    private void Start()
+    {
+        StartCoroutine(ScanRoutine());
+    }
+    
+    private IEnumerator ScanRoutine()
+    {
+        while (enabled)
+        {
+            yield return new WaitForSeconds(_delay);
+            
+            FindResources();
+        }
+    }
+    
     public void FindResources()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, _radius);
@@ -22,9 +34,19 @@ public class Scanner : MonoBehaviour
             {
                 if (collider.TryGetComponent(out Resource resource))
                 {
-                    ResourceFound?.Invoke(resource);
+                    if (resource.IsScanned == false && !resource.IsCollected == false)
+                    {
+                        resource.MarkAsScanned();
+                        ResourceFound?.Invoke(resource);
+                    }
                 }
             }
         }
+    }
+    
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _radius);
     }
 }
