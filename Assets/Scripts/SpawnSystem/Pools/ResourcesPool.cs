@@ -1,7 +1,3 @@
-using UnityEngine;
-using UnityEngine.Pool;
-using System.Collections.Generic;
-
 public class ResourcesPool : GameObjectsPool<Resource>
 {
     public event System.Action<Resource> ResourceReturnedToPool;
