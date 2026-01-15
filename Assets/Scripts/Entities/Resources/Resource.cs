@@ -12,17 +12,31 @@ public class Resource : Entity, IPoolable, IScannable, ITargetable
     public void MarkAsScanned()
     {
         if (_isScanned == false && _isCollected == false)
-        {
             _isScanned = true;
-        }
     }
     
     public void Collect()
     {
         if (_isCollected == false)
-        {
             _isCollected = true;
-            gameObject.SetActive(false);
-        }
+    }
+    
+    public void ResetState()
+    {
+        _isScanned = false;
+        _isCollected = false;
+        
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        
+        if (renderer != null)
+            renderer.enabled = true;
+        
+        Collider collider = GetComponent<Collider>();
+        
+        if (collider != null)
+            collider.enabled = true;
+        
+        if (transform.parent != null)
+            transform.SetParent(null);
     }
 }

@@ -1,38 +1,52 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class Mover : MonoBehaviour
 {
     [SerializeField, Range(0.0f, 100.0f)] private float _speed = 5f;
+    [SerializeField] private float _stopDistance = 0.5f;
 
-    private Coroutine _coroutine;
+    private Coroutine _moveCoroutine;
+    private bool _isMoving = false;
+    
+    public bool IsMoving => _isMoving;
 
     public void StartMove(Vector3 target)
     {
-        if (_coroutine != null)
-            StopCoroutine(_coroutine);
-
-        _coroutine = StartCoroutine(Move(target));
+        StopMove();
+        
+        _moveCoroutine = StartCoroutine(MoveToPosition(target));
     }
 
-    private IEnumerator Move(Vector3 targetPosition)
+    private IEnumerator MoveToPosition(Vector3 target)
     {
-        Vector3 currentTargetPosition = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
+        _isMoving = true;
         
-        while(enabled)
+        while (Vector3.Distance(transform.position, target) > _stopDistance)
         {
-            transform.LookAt(currentTargetPosition);
-            transform.position = Vector3.MoveTowards(transform.position, currentTargetPosition, _speed * Time.deltaTime);
-
+            Vector3 direction = (target - transform.position).normalized;
+            transform.position += direction * _speed * Time.deltaTime;
+            
+            if (direction != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(direction);
+            }
+            
             yield return null;
         }
+        
+        _isMoving = false;
+        _moveCoroutine = null;
     }
 
     public void StopMove()
     {
-        StopCoroutine(_coroutine);
+        if (_moveCoroutine != null)
+        {
+            StopCoroutine(_moveCoroutine);
+            _moveCoroutine = null;
+        }
+        
+        _isMoving = false;
     }
 }

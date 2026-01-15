@@ -12,6 +12,8 @@ public abstract class Spawner<T> : MonoBehaviour, ISpawner where T : MonoBehavio
 
     protected Coroutine Coroutine;
     
+    public event Action<T> ObjectSpawned;
+    
     private void OnEnable()
     {
         StartSpawning();
@@ -38,8 +40,24 @@ public abstract class Spawner<T> : MonoBehaviour, ISpawner where T : MonoBehavio
         while (enabled)
         {
             SpawnPoint randomSpawnPoint = GetRandomSpawnPoint();
+            
+            if (randomSpawnPoint == null)
+            {
+                yield return wait;
+                continue;
+            }
+            
             T spawnedObject = GameObjectsPool.GetObject();
+            
+            if (spawnedObject == null)
+            {
+                yield return wait;
+                continue;
+            }
+            
             spawnedObject.transform.position = randomSpawnPoint.transform.position;
+            OnObjectSpawned(spawnedObject);
+            ObjectSpawned?.Invoke(spawnedObject);
 
             yield return wait;
         }
@@ -47,8 +65,12 @@ public abstract class Spawner<T> : MonoBehaviour, ISpawner where T : MonoBehavio
 
     private SpawnPoint GetRandomSpawnPoint()
     {
+        if (SpawnPoints == null || SpawnPoints.Count == 0)
+            return null;
+            
         int randomIndex = Random.Range(0, SpawnPoints.Count);
-
         return SpawnPoints[randomIndex];
     }
+    
+    protected virtual void OnObjectSpawned(T spawnedObject) { }
 }
