@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,7 +10,10 @@ public class Mover : MonoBehaviour
     private Coroutine _moveCoroutine;
     private bool _isMoving = false;
     
+    public event Action TargetReached;
+    
     public bool IsMoving => _isMoving;
+    public float CurrentSpeed => _isMoving ? _speed : 0f;
 
     public void StartMove(Vector3 target)
     {
@@ -37,6 +41,8 @@ public class Mover : MonoBehaviour
         
         _isMoving = false;
         _moveCoroutine = null;
+        
+        TargetReached?.Invoke();
     }
 
     public void StopMove()

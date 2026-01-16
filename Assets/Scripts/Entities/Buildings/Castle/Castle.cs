@@ -27,17 +27,13 @@ public class Castle : Building
     private void OnEnable()
     {
         _scanner.ResourceFound += OnResourceFound;
-        
-        if (_resourceHandler != null)
-            _resourceHandler.ResourcesListUpdated += OnResourcesListUpdated;
+        _resourceHandler.ResourcesListUpdated += OnResourcesListUpdated;
     }
 
     private void OnDisable()
     {
         _scanner.ResourceFound -= OnResourceFound;
-        
-        if (_resourceHandler != null)
-            _resourceHandler.ResourcesListUpdated -= OnResourcesListUpdated;
+        _resourceHandler.ResourcesListUpdated -= OnResourcesListUpdated;
     }
 
     private void OnResourceFound(Resource resource)

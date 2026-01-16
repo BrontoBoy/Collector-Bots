@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public abstract class Spawner<T> : MonoBehaviour, ISpawner where T : MonoBehaviour
+public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
 {
     [SerializeField] protected List<SpawnPoint> SpawnPoints;
     [SerializeField] protected float Delay = 2f;

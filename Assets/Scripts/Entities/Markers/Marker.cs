@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Marker : Entity, IPoolable
+public class Marker : MonoBehaviour, IPoolable
 {
     public Vector3 Position => transform.position;
 }

@@ -2,13 +2,9 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Carrier))]
-[RequireComponent(typeof(Collector))]
-[RequireComponent(typeof(Deliverer))]
 public class Worker : Unit
 {
     private Carrier _carrier;
-    private Collector _collector;
-    private Deliverer _deliverer;
     private bool _isFree = true;
     private bool _hasResource = false;
     private ITargetable _currentTarget;
@@ -21,29 +17,66 @@ public class Worker : Unit
     public bool IsFree => _isFree;
     public bool HasResource => _hasResource;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake(); 
         _carrier = GetComponent<Carrier>();
-        _collector = GetComponent<Collector>();
-        _deliverer = GetComponent<Deliverer>();
+        
+        if (Mover != null)
+            Mover.TargetReached += OnTargetReached;
     }
     
-    private void OnEnable()
+    private void Start()
     {
-        if (_collector != null)
-            _collector.ResourceCollected += OnResourceCollected;
+        BoxCollider collider = GetComponent<BoxCollider>();
         
-        if (_deliverer != null)
-            _deliverer.DeliveryCompleted += OnDeliveryCompleted;
+        if (collider != null)
+            collider.isTrigger = false;
     }
-
+    
     private void OnDisable()
     {
-        if (_collector != null)
-            _collector.ResourceCollected -= OnResourceCollected;
+        if (Mover != null)
+            Mover.TargetReached -= OnTargetReached;
+    }
+    
+    private void FixedUpdate()
+    {
+        if (Animator != null)
+        {
+            bool isMoving = Mover != null && Mover.IsMoving;
+        
+            if (isMoving == true)
+            {
+                Animator.SetFloat("Speed", 1f);
+            }
+            else
+            {
+                Animator.SetFloat("Speed", 0f);
+            }
+        }
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.TryGetComponent(out Resource resource))
+        {
+            if (_isFree == false && _currentTarget == resource)
+                CollectResource(resource);
+        }
+    }
+    
+    private void CollectResource(Resource resource)
+    {
+        if (_hasResource == false && _carrier != null && resource != null)
+        {
+            resource.Collect();
+            _carrier.AttachResource(resource);
+            _hasResource = true;
+            _carriedResource = resource;
             
-        if (_deliverer != null)
-            _deliverer.DeliveryCompleted -= OnDeliveryCompleted;
+            ResourceCollected?.Invoke(this, resource);
+        }
     }
     
     public void AssignTarget(ITargetable target)
@@ -66,45 +99,28 @@ public class Worker : Unit
         _carriedResource = null;
         
         if (Mover != null)
-        {
             Mover.StopMove();
-        }
+        
+        if (Animator != null)
+            Animator.SetFloat("Speed", 0f);
         
         BecameFree?.Invoke(this);
     }
     
-    private void OnResourceCollected(Resource resource)
-    {
-        if (_hasResource == false && _carrier != null)
-        {
-            _carrier.AttachResource(resource);
-            _hasResource = true;
-            
-            _carriedResource = resource;
-            
-            ResourceCollected?.Invoke(this, resource);
-        }
-    }
-    
-    private void OnDeliveryCompleted()
-    {
-        if (_hasResource == false || _carrier == null)
-            return;
-        
-        Resource deliveredResource = _carrier.DetachResource();
-        _hasResource = false;
-        
-        ResourceDelivered?.Invoke(this, deliveredResource);
-        
-        _carriedResource = null;
-        SetAsFree();
-    }
-    
     public void MoveToTarget(ITargetable target)
     {
-        if (target != null)
-        {
+        if (target != null && Mover != null)
             Mover.StartMove(target.Position);
+        
+        if (Animator != null)
+            Animator.SetFloat("Speed", 1f);
+    }
+    
+    private void OnTargetReached()
+    {
+        if (_hasResource == true && _carriedResource != null)
+        {
+            ResourceDelivered?.Invoke(this, _carriedResource);
         }
     }
 }

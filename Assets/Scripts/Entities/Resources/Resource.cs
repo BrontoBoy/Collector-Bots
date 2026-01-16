@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Resource : Entity, IPoolable, IScannable, ITargetable
+public class Resource : MonoBehaviour, IPoolable, ITargetable
 {
     private bool _isScanned = false;
     private bool _isCollected = false; 
@@ -18,7 +18,17 @@ public class Resource : Entity, IPoolable, IScannable, ITargetable
     public void Collect()
     {
         if (_isCollected == false)
+        {
             _isCollected = true;
+            
+            MeshRenderer renderer = GetComponent<MeshRenderer>();
+            if (renderer != null)
+                renderer.enabled = false;
+            
+            Collider collider = GetComponent<Collider>();
+            if (collider != null)
+                collider.enabled = false;
+        }
     }
     
     public void ResetState()

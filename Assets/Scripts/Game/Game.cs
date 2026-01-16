@@ -1,16 +1,28 @@
+using System.Collections.Generic;
 using UnityEngine;
 
+
+[RequireComponent(typeof(InputReader))]
 public class Game : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private ResourcesSpawner _resourcesSpawner;
+    [SerializeField] private List<Castle> _castles = new List<Castle>();
 
-    // Update is called once per frame
-    void Update()
+    private InputReader _inputReader;
+    
+    private void Awake()
     {
-        
+        _inputReader = GetComponent<InputReader>();
+    }
+    
+    private void Start()
+    {
+        StartResourceSpawning();
+    }
+    
+    private void StartResourceSpawning()
+    {
+        if (_resourcesSpawner != null)
+            _resourcesSpawner.StartSpawning();
     }
 }

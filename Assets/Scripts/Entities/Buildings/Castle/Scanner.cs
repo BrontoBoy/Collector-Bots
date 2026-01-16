@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Scanner : MonoBehaviour
 {
-    [SerializeField] private float _radius = 10f;
+    [SerializeField] private float _radius = 100f;
     [SerializeField] private float _delay = 2f;
 
     public event Action<Resource> ResourceFound;

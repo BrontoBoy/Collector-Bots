@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-public class Building : Entity, IPoolable, ITargetable
+public class Building : MonoBehaviour, IPoolable, ITargetable
 {
 	[SerializeField] protected int Cost;
 
