@@ -3,16 +3,24 @@ using UnityEngine;
 public class Carrier : MonoBehaviour
 {
     [SerializeField] private SpawnPoint _carryPoint;
+
     private Resource _carriedResource;
     
     public bool IsCarrying => _carriedResource != null;
+	public Resource CarriedResource => _carriedResource;
     
+	public void SetCarriedResource(Resource resource)
+	{
+		_carriedResource = resource;
+	}
+
     public void AttachResource(Resource resource)
     {
         if (resource == null || _carriedResource != null)
             return;
             
-        _carriedResource = resource;
+        SetCarriedResource(resource);
+
         resource.transform.SetParent(_carryPoint.transform);
         resource.transform.localPosition = Vector3.zero;
         resource.transform.localRotation = Quaternion.identity;
@@ -24,8 +32,7 @@ public class Carrier : MonoBehaviour
             return null;
             
         Resource resource = _carriedResource;
-        _carriedResource = null;
-        
+        SetCarriedResource(null);
         resource.transform.SetParent(null);
         
         return resource;

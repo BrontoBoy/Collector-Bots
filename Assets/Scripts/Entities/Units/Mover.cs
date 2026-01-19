@@ -5,7 +5,7 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     [SerializeField, Range(0.0f, 100.0f)] private float _speed = 5f;
-    [SerializeField] private float _stopDistance = 0.5f;
+    [SerializeField, Range(0.01f, 1.0f)] private float _stopDistance = 0.05f;
 
     private Coroutine _moveCoroutine;
     private bool _isMoving = false;
@@ -18,7 +18,7 @@ public class Mover : MonoBehaviour
     public void StartMove(Vector3 target)
     {
         StopMove();
-        
+       
         _moveCoroutine = StartCoroutine(MoveToPosition(target));
     }
 
@@ -32,9 +32,7 @@ public class Mover : MonoBehaviour
             transform.position += direction * _speed * Time.deltaTime;
             
             if (direction != Vector3.zero)
-            {
                 transform.rotation = Quaternion.LookRotation(direction);
-            }
             
             yield return null;
         }

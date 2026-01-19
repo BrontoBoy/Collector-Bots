@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ public class Game : MonoBehaviour
 
     private InputReader _inputReader;
     
+    public static event Action<Resource> ResourceDeliveredToStorage;
+    
     private void Awake()
     {
         _inputReader = GetComponent<InputReader>();
@@ -20,9 +23,32 @@ public class Game : MonoBehaviour
         StartResourceSpawning();
     }
     
+    private void OnEnable()
+    {
+        ResourceDeliveredToStorage += OnResourceDeliveredToStorage;
+    }
+    
+    private void OnDisable()
+    {
+        ResourceDeliveredToStorage -= OnResourceDeliveredToStorage;
+    }
+    
     private void StartResourceSpawning()
     {
         if (_resourcesSpawner != null)
             _resourcesSpawner.StartSpawning();
+    }
+    
+    public static void NotifyResourceDelivered(Resource resource)
+    {
+        ResourceDeliveredToStorage?.Invoke(resource);
+    }
+    
+    private void OnResourceDeliveredToStorage(Resource resource)
+    {
+        if (_resourcesSpawner != null)
+        {
+            _resourcesSpawner.ReturnResource(resource);
+        }
     }
 }

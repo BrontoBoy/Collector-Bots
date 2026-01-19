@@ -9,6 +9,20 @@ public class WorkerHandler : MonoBehaviour
     
     public bool HasFreeWorkers => _freeWorkers.Count > 0;
     
+    public int WorkersCount => _workers.Count;
+    
+    public int WorkerCost
+    {
+        get
+        {
+            if (_workers.Count > 0 && _workers[0] != null)
+            {
+                return _workers[0].UnitCost;
+            }
+            return 5;
+        }
+    }
+    
     public void Initialize()
     {
         _freeWorkers.Clear();

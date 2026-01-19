@@ -14,6 +14,9 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
     
     public event Action<T> ObjectSpawned;
     
+    public List<SpawnPoint> SpawnPointsList => SpawnPoints;
+    public GameObjectsPool<T> Pool => GameObjectsPool;
+    
     private void OnEnable()
     {
         StartSpawning();

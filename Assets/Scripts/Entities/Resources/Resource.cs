@@ -1,14 +1,24 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Collider))]
 public class Resource : MonoBehaviour, IPoolable, ITargetable
 {
-    private bool _isScanned = false;
-    private bool _isCollected = false; 
+	protected BoxCollider Сollider;
+	protected Rigidbody Rigidbody;
+
+    protected bool _isScanned = false;
+    protected bool _isCollected = false; 
     
     public Vector3 Position => transform.position;
     public bool IsScanned => _isScanned;
     public bool IsCollected => _isCollected;
     
+ 	protected virtual void Awake()
+    	{
+        	BoxCollider collider = GetComponent<BoxCollider>();
+			Rigidbody Rigidbody = GetComponent<Rigidbody>();
+    	}
+
     public void MarkAsScanned()
     {
         if (_isScanned == false && _isCollected == false)
@@ -22,6 +32,7 @@ public class Resource : MonoBehaviour, IPoolable, ITargetable
             _isCollected = true;
             
             MeshRenderer renderer = GetComponent<MeshRenderer>();
+
             if (renderer != null)
                 renderer.enabled = false;
             

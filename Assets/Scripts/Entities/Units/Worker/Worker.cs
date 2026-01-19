@@ -6,38 +6,29 @@ public class Worker : Unit
 {
     private Carrier _carrier;
     private bool _isFree = true;
-    private bool _hasResource = false;
     private ITargetable _currentTarget;
-    private Resource _carriedResource;
     
     public event Action<Worker, Resource> ResourceCollected;
     public event Action<Worker, Resource> ResourceDelivered;
     public event Action<Worker> BecameFree;
     
     public bool IsFree => _isFree;
-    public bool HasResource => _hasResource;
+    public Carrier Carrier => _carrier;
 
     protected override void Awake()
     {
         base.Awake(); 
         _carrier = GetComponent<Carrier>();
-        
-        if (Mover != null)
-            Mover.TargetReached += OnTargetReached;
     }
     
-    private void Start()
+    private void OnEnable()
     {
-        BoxCollider collider = GetComponent<BoxCollider>();
-        
-        if (collider != null)
-            collider.isTrigger = false;
+        Mover.TargetReached += OnTargetReached;
     }
     
     private void OnDisable()
     {
-        if (Mover != null)
-            Mover.TargetReached -= OnTargetReached;
+        Mover.TargetReached -= OnTargetReached;
     }
     
     private void FixedUpdate()
@@ -61,42 +52,45 @@ public class Worker : Unit
     {
         if (collision.gameObject.TryGetComponent(out Resource resource))
         {
-            if (_isFree == false && _currentTarget == resource)
+            if (_isFree == false && ReferenceEquals(_currentTarget, resource))
                 CollectResource(resource);
         }
     }
     
     private void CollectResource(Resource resource)
     {
-        if (_hasResource == false && _carrier != null && resource != null)
+        if (_carrier.IsCarrying == false && resource != null)
         {
             resource.Collect();
             _carrier.AttachResource(resource);
-            _hasResource = true;
-            _carriedResource = resource;
             
             ResourceCollected?.Invoke(this, resource);
+            
+            _currentTarget = null;
         }
     }
     
     public void AssignTarget(ITargetable target)
     {
-        if (_isFree == false || target == null)
+        if (target == null)
             return;
             
         _currentTarget = target;
-        _isFree = false;
-        _hasResource = false;
-        _carriedResource = null;
+        
+        if (_isFree)
+        {
+            _isFree = false;
+            _carrier.SetCarriedResource(null);
+        }
+        
         MoveToTarget(target);
     }
     
     public void SetAsFree()
     {
         _isFree = true;
-        _hasResource = false;
         _currentTarget = null;
-        _carriedResource = null;
+        _carrier.SetCarriedResource(null);
         
         if (Mover != null)
             Mover.StopMove();
@@ -118,9 +112,11 @@ public class Worker : Unit
     
     private void OnTargetReached()
     {
-        if (_hasResource == true && _carriedResource != null)
+        if (_carrier.IsCarrying == true)
         {
-            ResourceDelivered?.Invoke(this, _carriedResource);
+            ResourceDelivered?.Invoke(this, _carrier.CarriedResource);
+            _carrier.DetachResource();
+            SetAsFree();
         }
     }
 }
