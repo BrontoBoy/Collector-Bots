@@ -6,10 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Unit : MonoBehaviour, IPoolable
 {
-    [SerializeField] protected int Cost;
-    
-    public int UnitCost => Cost;
-    
     protected Mover Mover; 
     protected Animator Animator;
 	protected Collider Collider;

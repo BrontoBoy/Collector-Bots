@@ -4,24 +4,16 @@ using UnityEngine;
 public class WorkerHandler : MonoBehaviour
 {
     [SerializeField] private List<Worker> _workers = new List<Worker>();
+    [SerializeField] private int _workerCost = 5;
+    [SerializeField] private int _maxWorkers = 10;
     
     private Queue<Worker> _freeWorkers = new Queue<Worker>();
     
     public bool HasFreeWorkers => _freeWorkers.Count > 0;
-    
     public int WorkersCount => _workers.Count;
-    
-    public int WorkerCost
-    {
-        get
-        {
-            if (_workers.Count > 0 && _workers[0] != null)
-            {
-                return _workers[0].UnitCost;
-            }
-            return 5;
-        }
-    }
+    public int MaxWorkers => _maxWorkers;
+    public int WorkerCost => _workerCost;
+    public bool CanAddMoreWorkers => WorkersCount < MaxWorkers;
     
     public void Initialize()
     {
@@ -73,7 +65,8 @@ public class WorkerHandler : MonoBehaviour
     
     public void AddWorker(Worker worker)
     {
-        if (worker != null && _workers.Contains(worker) == false)
+        if (worker != null && _workers.Contains(worker) == false && CanAddMoreWorkers)
+            // ↑↑↑ ИЗМЕНИЛИ: добавили проверку CanAddMoreWorkers ↑↑↑
         {
             _workers.Add(worker);
             ReturnWorkerToFree(worker);

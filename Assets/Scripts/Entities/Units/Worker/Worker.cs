@@ -90,7 +90,11 @@ public class Worker : Unit
     {
         _isFree = true;
         _currentTarget = null;
-        _carrier.SetCarriedResource(null);
+        
+        if (_carrier.IsCarrying)
+        {
+            _carrier.SetCarriedResource(null);
+        }
         
         if (Mover != null)
             Mover.StopMove();

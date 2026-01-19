@@ -34,7 +34,7 @@ public class Scanner : MonoBehaviour
             {
                 if (collider.TryGetComponent(out Resource resource))
                 {
-                    if (resource.IsScanned == false && resource.IsCollected == false)
+                    if (resource.IsCollected == false)
                     {
                         resource.MarkAsScanned();
                         ResourceFound?.Invoke(resource);
