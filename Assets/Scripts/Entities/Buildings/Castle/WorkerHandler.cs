@@ -13,7 +13,7 @@ public class WorkerHandler : MonoBehaviour
     public int WorkersCount => _workers.Count;
     public int MaxWorkers => _maxWorkers;
     public int WorkerCost => _workerCost;
-    public bool CanAddMoreWorkers => WorkersCount < MaxWorkers;
+	public bool CanAddMoreWorkers => WorkersCount < MaxWorkers;
     
     public void Initialize()
     {

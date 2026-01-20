@@ -14,8 +14,8 @@ public class Castle : Building
     private WorkerHandler _workerHandler;
 	private CastleUI _castleUI;
 	private UnitsSpawner _unitsSpawner;
-    
-    private bool _isSpawningWorker = false;
+
+	private bool _isSpawningWorker = false;
     
     private void Awake()
     {
@@ -60,20 +60,18 @@ public class Castle : Building
     
     private void TryAssignWorkerToResource()
     {
-        if (_isSpawningWorker) return;
-        
-        // Используем значения из WorkerHandler
-        if (_workerHandler.WorkersCount >= _workerHandler.MaxWorkers)
-        {
+        if (_workerHandler.HasFreeWorkers == false)
             return;
-        }
         
-        // Берем стоимость из WorkerHandler
-        if (_storage.ResourcesValue >= _workerHandler.WorkerCost)
-        {
-            _isSpawningWorker = true;
-            SpawnNewWorker(_workerHandler.WorkerCost);
-        }
+        Resource nearestResource = _resourceHandler.GetNearestResource();
+        
+        if (nearestResource == null)
+            return;
+        
+        Worker freeWorker = _workerHandler.GetFreeWorker();
+        
+        if (freeWorker != null)
+            AssignWorkerToResource(freeWorker, nearestResource);
     }
     
     private void AssignWorkerToResource(Worker worker, Resource resource)
@@ -142,21 +140,13 @@ public class Castle : Building
 
     private void TrySpawnWorker()
     {
-        if (_isSpawningWorker) return;
-        // ↑↑↑ ДОБАВИЛИ: проверка на повторный спавн ↑↑↑
-
-        // ↓↓↓ ИЗМЕНИЛИ: используем значения из WorkerHandler ↓↓↓
         if (_workerHandler.WorkersCount >= _workerHandler.MaxWorkers)
             return;
         
         int workerCost = _workerHandler.WorkerCost;
-        // ↑↑↑ ИЗМЕНИЛИ: используем значения из WorkerHandler ↑↑↑
         
         if (_storage.ResourcesValue >= workerCost)
         {
-            // ↓↓↓ ДОБАВИЛИ ↓↓↓
-            _isSpawningWorker = true;
-            // ↑↑↑ ДОБАВИЛИ ↑↑↑
             SpawnNewWorker(workerCost);
         }
     }
@@ -164,42 +154,41 @@ public class Castle : Building
     private void SpawnNewWorker(int cost)
     {
         _storage.SpendResource(cost);
-
-        if (_unitsSpawner != null && _unitsSpawner.Pool != null)
+    
+    if (_unitsSpawner != null && _unitsSpawner.Pool != null)
+    {
+        Unit newUnit = _unitsSpawner.Pool.GetObject();
+        
+        if (newUnit is Worker newWorker)
         {
-            Unit newUnit = _unitsSpawner.Pool.GetObject();
-        
-            if (newUnit == null)
-            {
-                Debug.LogError("Pool returned null!");
-                _isSpawningWorker = false; // ← ВАЖНО: сбрасываем флаг
-                return;
-            }
-        
-            if (newUnit is Worker newWorker)
-            {
-                _workerHandler.AddWorker(newWorker);
+            _workerHandler.AddWorker(newWorker);
             
-                if (_unitsSpawner.SpawnPointsList.Count > 0)
-                {
-                    int randomIndex = Random.Range(0, _unitsSpawner.SpawnPointsList.Count);
-                    newWorker.transform.position = _unitsSpawner.SpawnPointsList[randomIndex].transform.position;
-                }
-            
-                newWorker.SetAsFree();
-                _isSpawningWorker = false;
-                TryAssignWorkerToResource();
-            }
-            else
+            if (_unitsSpawner.SpawnPointsList.Count > 0)
             {
-                Debug.LogError("Spawned unit is not a Worker!");
-                _isSpawningWorker = false;
+                int randomIndex = Random.Range(0, _unitsSpawner.SpawnPointsList.Count);
+                newWorker.transform.position = _unitsSpawner.SpawnPointsList[randomIndex].transform.position;
             }
+            
+            newWorker.SetAsFree();
+            
+            // ↓↓↓ ДОБАВЬ ЭТУ СТРОЧКУ:
+            _isSpawningWorker = false; // Сбрасываем флаг после успешного спавна
+            // ↑↑↑ ДОБАВЬ ЭТУ СТРОЧКУ ↑↑↑
+            
+            TryAssignWorkerToResource();
         }
         else
         {
-            Debug.LogError("UnitsSpawner or Pool is null!");
-            _isSpawningWorker = false;
+            // ↓↓↓ ДОБАВЬ ЭТУ СТРОЧКУ (если не Worker):
+            _isSpawningWorker = false; // Сбрасываем флаг если ошибка
+            // ↑↑↑ ДОБАВЬ ЭТУ СТРОЧКУ ↑↑↑
         }
     }
+    else
+    {
+        // ↓↓↓ ДОБАВЬ ЭТУ СТРОЧКУ (если спавнер null):
+        _isSpawningWorker = false; // Сбрасываем флаг
+        // ↑↑↑ ДОБАВЬ ЭТУ СТРОЧКУ ↑↑↑
+    }
+	}
 }

@@ -5,23 +5,13 @@ using UnityEngine;
 public class Scanner : MonoBehaviour
 {
     [SerializeField] private float _radius = 100f;
-    [SerializeField] private float _delay = 2f;
+    [SerializeField] private float _delay = 1f;
 
     public event Action<Resource> ResourceFound;
     
     private void Start()
     {
         StartCoroutine(ScanRoutine());
-    }
-    
-    private IEnumerator ScanRoutine()
-    {
-        while (enabled)
-        {
-            yield return new WaitForSeconds(_delay);
-            
-            FindResources();
-        }
     }
     
     public void FindResources()
@@ -34,7 +24,7 @@ public class Scanner : MonoBehaviour
             {
                 if (collider.TryGetComponent(out Resource resource))
                 {
-                    if (resource.IsCollected == false)
+                    if (resource.IsScanned == false && resource.IsCollected == false)
                     {
                         resource.MarkAsScanned();
                         ResourceFound?.Invoke(resource);
@@ -44,9 +34,13 @@ public class Scanner : MonoBehaviour
         }
     }
     
-    private void OnDrawGizmosSelected()
+    private IEnumerator ScanRoutine()
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, _radius);
+        while (enabled)
+        {
+            yield return new WaitForSeconds(_delay);
+            
+            FindResources();
+        }
     }
 }

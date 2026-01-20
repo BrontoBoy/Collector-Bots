@@ -493,8 +493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b159414d806ad3f4993ce8bb66bc2170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Castle
-  Cost: 0
-  _maxWorkers: 10
+  Cost: 15
 --- !u!114 &-2933456717488768549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,8 +506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5221f341e4919b45926435d1d961b69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Scanner
-  _radius: 21.69
-  _delay: 0
+  _radius: 25
+  _delay: 1
 --- !u!114 &4285559579816868935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,6 +549,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  _workerCost: 5
+  _maxWorkers: 10
 --- !u!114 &3040581926291313998
 MonoBehaviour:
   m_ObjectHideFlags: 0

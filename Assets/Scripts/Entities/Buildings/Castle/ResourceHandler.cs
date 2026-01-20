@@ -6,11 +6,11 @@ using UnityEngine;
 public class ResourceHandler : MonoBehaviour
 {
     private ResourcesSpawner _resourcesSpawner;
-    private List<Resource> _availableResources = new List<Resource>();
+    private List<Resource> _foundResources = new List<Resource>();
     
     public event Action ResourcesListUpdated;
     
-    public bool HasAvailableResources => _availableResources.Count > 0;
+    public bool HasAvailableResources => _foundResources.Count > 0;
 
     private void Awake()
     {
@@ -19,30 +19,19 @@ public class ResourceHandler : MonoBehaviour
     
     private void OnEnable()
     {
-        if (_resourcesSpawner != null)
-        {
             _resourcesSpawner.ResourceSpawned += OnResourceSpawned;
-        }
     }
 
     private void OnDisable()
     {
-        if (_resourcesSpawner != null)
-        {
             _resourcesSpawner.ResourceSpawned -= OnResourceSpawned;
-        }
-    }
-    
-    private void OnResourceSpawned(Resource resource)
-    {
-        AddResource(resource);
     }
     
     public void AddResource(Resource resource)
     {
-        if (_availableResources.Contains(resource) == false)
+        if (_foundResources.Contains(resource) == false)
         {
-            _availableResources.Add(resource);
+            _foundResources.Add(resource);
             SortResourcesByDistance();
             ResourcesListUpdated?.Invoke();
         }
@@ -50,23 +39,25 @@ public class ResourceHandler : MonoBehaviour
     
     public void RemoveResource(Resource resource)
     {
-        _availableResources.Remove(resource);
+        _foundResources.Remove(resource);
         SortResourcesByDistance(); 
         ResourcesListUpdated?.Invoke();
     }
     
     public Resource GetNearestResource()
     {
-        if (_availableResources.Count == 0)
+        if (_foundResources.Count == 0)
             return null;
         
-        return _availableResources[0];
+        return _foundResources[0];
     }
     
     public void ReturnResourceToPool(Resource resource)
     {
         if (resource != null && _resourcesSpawner != null)
         {
+            RemoveResource(resource);
+            resource.ResetState();
             _resourcesSpawner.ReturnResource(resource);
         }
     }
@@ -75,7 +66,12 @@ public class ResourceHandler : MonoBehaviour
     {
         Vector3 castlePosition = transform.position;
         
-        _availableResources = _availableResources.Where(resource => resource != null && resource.IsCollected == false)
+        _foundResources = _foundResources.Where(resource => resource != null && resource.IsCollected == false)
             .OrderBy(resource => Vector3.Distance(castlePosition, resource.transform.position)).ToList();
+    }
+    
+    private void OnResourceSpawned(Resource resource)
+    {
+        AddResource(resource);
     }
 }
