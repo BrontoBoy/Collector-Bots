@@ -57,18 +57,6 @@ public class Worker : Unit
         }
     }
     
-    private void CollectResource(Resource resource)
-    {
-        if (_carrier.IsCarrying == false && resource != null)
-        {
-            resource.Collect();
-            _carrier.AttachResource(resource);
-            
-            ResourceCollected?.Invoke(this, resource);
-            
-            _currentTarget = null;
-        }
-    }
     
     public void AssignTarget(ITargetable target)
     {
@@ -92,9 +80,7 @@ public class Worker : Unit
         _currentTarget = null;
         
         if (_carrier.IsCarrying)
-        {
             _carrier.SetCarriedResource(null);
-        }
         
         if (Mover != null)
             Mover.StopMove();
@@ -121,6 +107,19 @@ public class Worker : Unit
             ResourceDelivered?.Invoke(this, _carrier.CarriedResource);
             _carrier.DetachResource();
             SetAsFree();
+        }
+    }
+    
+    private void CollectResource(Resource resource)
+    {
+        if (_carrier.IsCarrying == false && resource != null)
+        {
+            resource.Collect();
+            _carrier.AttachResource(resource);
+            
+            ResourceCollected?.Invoke(this, resource);
+            
+            _currentTarget = null;
         }
     }
 }

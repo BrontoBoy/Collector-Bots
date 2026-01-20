@@ -14,7 +14,7 @@ public class TargetPoint : MonoBehaviour, ITargetable
         if (worker != null)
         {
             if(worker.Carrier.IsCarrying)
-            WorkerEnteredDeliveryZone?.Invoke(worker);
+                WorkerEnteredDeliveryZone?.Invoke(worker);
         }
     }
 }

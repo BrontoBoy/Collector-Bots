@@ -13,7 +13,6 @@ public class WorkerHandler : MonoBehaviour
     public int WorkersCount => _workers.Count;
     public int MaxWorkers => _maxWorkers;
     public int WorkerCost => _workerCost;
-	public bool CanAddMoreWorkers => WorkersCount < MaxWorkers;
     
     public void Initialize()
     {
@@ -22,9 +21,7 @@ public class WorkerHandler : MonoBehaviour
         foreach (var worker in _workers)
         {
             if (worker != null)
-            {
                 _freeWorkers.Enqueue(worker);
-            }
         }
     }
     
@@ -65,8 +62,10 @@ public class WorkerHandler : MonoBehaviour
     
     public void AddWorker(Worker worker)
     {
-        if (worker != null && _workers.Contains(worker) == false && CanAddMoreWorkers)
-            // ↑↑↑ ИЗМЕНИЛИ: добавили проверку CanAddMoreWorkers ↑↑↑
+        if(_workers.Count == _maxWorkers)
+            return;
+        
+        if (worker != null && _workers.Contains(worker) == false)
         {
             _workers.Add(worker);
             ReturnWorkerToFree(worker);
@@ -80,10 +79,9 @@ public class WorkerHandler : MonoBehaviour
         while (_freeWorkers.Count > 0)
         {
             Worker worker = _freeWorkers.Dequeue();
+            
             if (worker != null && worker.IsFree)
-            {
                 validWorkers.Add(worker);
-            }
         }
         
         foreach (Worker worker in validWorkers)

@@ -22,6 +22,18 @@ public class Storage : MonoBehaviour
         _deliveryPoint.WorkerEnteredDeliveryZone -= OnWorkerEnteredDeliveryZone;
     }
     
+    public void AddResource()
+    {
+        _resourcesValue++;
+        ResourcesChanged?.Invoke(_resourcesValue);
+    }
+    
+    public void SpendResource(int price)
+    {
+        _resourcesValue -= price;
+        ResourcesChanged?.Invoke(_resourcesValue);
+    }
+    
     private void OnWorkerEnteredDeliveryZone(Worker worker)
     {
         Carrier carrier = worker.GetComponent<Carrier>();
@@ -38,18 +50,5 @@ public class Storage : MonoBehaviour
             ResourcesSpawner.СommonResourcesSpawner?.ReturnResource(resource);
             worker.SetAsFree();
         }
-    }
-    
-    public void AddResource()
-    {
-        _resourcesValue++;
-        Debug.Log($"Storage {name}: +1 = {_resourcesValue}");
-        ResourcesChanged?.Invoke(_resourcesValue);
-    }
-    
-    public void SpendResource(int price)
-    {
-        _resourcesValue -= price;
-        ResourcesChanged?.Invoke(_resourcesValue);
     }
 }

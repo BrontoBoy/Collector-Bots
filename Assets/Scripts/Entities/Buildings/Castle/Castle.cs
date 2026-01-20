@@ -14,8 +14,6 @@ public class Castle : Building
     private WorkerHandler _workerHandler;
 	private CastleUI _castleUI;
 	private UnitsSpawner _unitsSpawner;
-
-	private bool _isSpawningWorker = false;
     
     private void Awake()
     {
@@ -121,7 +119,6 @@ public class Castle : Building
     
 	private void UpdateCastleUI()
     {
-		 Debug.Log($"Castle {name}: UI update, storage value = {_storage.ResourcesValue}");
 		_castleUI.UpdateResourcesDisplay(_storage.ResourcesValue);
     }
     
@@ -146,49 +143,23 @@ public class Castle : Building
         int workerCost = _workerHandler.WorkerCost;
         
         if (_storage.ResourcesValue >= workerCost)
-        {
             SpawnNewWorker(workerCost);
-        }
     }
     
     private void SpawnNewWorker(int cost)
     {
         _storage.SpendResource(cost);
     
-    if (_unitsSpawner != null && _unitsSpawner.Pool != null)
-    {
-        Unit newUnit = _unitsSpawner.Pool.GetObject();
+        if (_unitsSpawner != null)
+        {
+            Unit newUnit = _unitsSpawner.SpawnWorker();
         
-        if (newUnit is Worker newWorker)
-        {
-            _workerHandler.AddWorker(newWorker);
-            
-            if (_unitsSpawner.SpawnPointsList.Count > 0)
+            if (newUnit is Worker newWorker)
             {
-                int randomIndex = Random.Range(0, _unitsSpawner.SpawnPointsList.Count);
-                newWorker.transform.position = _unitsSpawner.SpawnPointsList[randomIndex].transform.position;
+                _workerHandler.AddWorker(newWorker);
+                newWorker.SetAsFree();
+                TryAssignWorkerToResource();
             }
-            
-            newWorker.SetAsFree();
-            
-            // ↓↓↓ ДОБАВЬ ЭТУ СТРОЧКУ:
-            _isSpawningWorker = false; // Сбрасываем флаг после успешного спавна
-            // ↑↑↑ ДОБАВЬ ЭТУ СТРОЧКУ ↑↑↑
-            
-            TryAssignWorkerToResource();
         }
-        else
-        {
-            // ↓↓↓ ДОБАВЬ ЭТУ СТРОЧКУ (если не Worker):
-            _isSpawningWorker = false; // Сбрасываем флаг если ошибка
-            // ↑↑↑ ДОБАВЬ ЭТУ СТРОЧКУ ↑↑↑
-        }
-    }
-    else
-    {
-        // ↓↓↓ ДОБАВЬ ЭТУ СТРОЧКУ (если спавнер null):
-        _isSpawningWorker = false; // Сбрасываем флаг
-        // ↑↑↑ ДОБАВЬ ЭТУ СТРОЧКУ ↑↑↑
-    }
 	}
 }

@@ -9,8 +9,6 @@ public class ResourceHandler : MonoBehaviour
     private List<Resource> _foundResources = new List<Resource>();
     
     public event Action ResourcesListUpdated;
-    
-    public bool HasAvailableResources => _foundResources.Count > 0;
 
     private void Awake()
     {
@@ -19,12 +17,18 @@ public class ResourceHandler : MonoBehaviour
     
     private void OnEnable()
     {
+        if (_resourcesSpawner != null)
+        {
             _resourcesSpawner.ResourceSpawned += OnResourceSpawned;
+        }
     }
 
     private void OnDisable()
     {
+        if (_resourcesSpawner != null)
+        {
             _resourcesSpawner.ResourceSpawned -= OnResourceSpawned;
+        }
     }
     
     public void AddResource(Resource resource)

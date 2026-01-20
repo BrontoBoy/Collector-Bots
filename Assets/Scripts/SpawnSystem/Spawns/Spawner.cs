@@ -9,17 +9,19 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
     [SerializeField] protected List<SpawnPoint> SpawnPoints;
     [SerializeField] protected float Delay = 2f;
     [SerializeField] protected GameObjectsPool<T> GameObjectsPool;
-
-    protected Coroutine Coroutine;
     
-    public event Action<T> ObjectSpawned;
+    protected Coroutine Coroutine;
+    protected bool AutoStart = true;
     
     public List<SpawnPoint> SpawnPointsList => SpawnPoints;
     public GameObjectsPool<T> Pool => GameObjectsPool;
     
-    private void OnEnable()
+    protected void OnEnable()
     {
-        StartSpawning();
+        if (AutoStart)
+        {
+            StartSpawning();
+        }
     }
 
     private void OnDisable()
@@ -60,7 +62,6 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
             
             spawnedObject.transform.position = randomSpawnPoint.transform.position;
             OnObjectSpawned(spawnedObject);
-            ObjectSpawned?.Invoke(spawnedObject);
 
             yield return wait;
         }

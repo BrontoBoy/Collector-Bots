@@ -13,13 +13,22 @@ public class Mover : MonoBehaviour
     public event Action TargetReached;
     
     public bool IsMoving => _isMoving;
-    public float CurrentSpeed => _isMoving ? _speed : 0f;
 
     public void StartMove(Vector3 target)
     {
         StopMove();
-       
         _moveCoroutine = StartCoroutine(MoveToPosition(target));
+    }
+    
+    public void StopMove()
+    {
+        if (_moveCoroutine != null)
+        {
+            StopCoroutine(_moveCoroutine);
+            _moveCoroutine = null;
+        }
+        
+        _isMoving = false;
     }
 
     private IEnumerator MoveToPosition(Vector3 target)
@@ -41,16 +50,5 @@ public class Mover : MonoBehaviour
         _moveCoroutine = null;
         
         TargetReached?.Invoke();
-    }
-
-    public void StopMove()
-    {
-        if (_moveCoroutine != null)
-        {
-            StopCoroutine(_moveCoroutine);
-            _moveCoroutine = null;
-        }
-        
-        _isMoving = false;
     }
 }
