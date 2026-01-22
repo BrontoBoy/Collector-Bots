@@ -11,6 +11,7 @@ public class GameObjectsPool<T> : MonoBehaviour where T : MonoBehaviour
     protected ObjectPool<T> Pool;
     protected List<T> ActiveObjects = new List<T>();
     
+    
     private void OnValidate()
     {
         if (PoolCapacity > MaxPoolCapacity)

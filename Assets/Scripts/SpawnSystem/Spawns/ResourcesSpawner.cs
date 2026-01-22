@@ -2,19 +2,19 @@ using System;
 
 public class ResourcesSpawner : Spawner<Resource>
 { 
-    public static ResourcesSpawner СommonResourcesSpawner { get; private set; }
+    public static ResourcesSpawner CommonResourcesSpawner { get; private set; }
     
     public event Action<Resource> ResourceSpawned;
     
     private void Awake()
     {
-        СommonResourcesSpawner = this;
+        CommonResourcesSpawner = this;
     }
     
     private void OnDestroy()
     {
-        if (СommonResourcesSpawner == this)
-            СommonResourcesSpawner = null;
+        if (CommonResourcesSpawner == this)
+            CommonResourcesSpawner = null;
     }
     
     protected override void OnObjectSpawned(Resource spawnedObject)
@@ -26,6 +26,9 @@ public class ResourcesSpawner : Spawner<Resource>
     public void ReturnResource(Resource resource)
     {
         if (GameObjectsPool != null && resource != null)
+        {
+            resource.ResetState();
             GameObjectsPool.ReturnObject(resource);
+        }
     }
 }

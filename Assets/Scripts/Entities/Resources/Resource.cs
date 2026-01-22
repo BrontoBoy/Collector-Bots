@@ -28,6 +28,7 @@ public class Resource : MonoBehaviour, IPoolable, ITargetable
                 renderer.enabled = false;
             
             Collider collider = GetComponent<Collider>();
+            
             if (collider != null)
                 collider.enabled = false;
         }
@@ -48,7 +49,6 @@ public class Resource : MonoBehaviour, IPoolable, ITargetable
         if (collider != null)
             collider.enabled = true;
         
-        if (transform.parent != null)
             transform.SetParent(null);
     }
 }

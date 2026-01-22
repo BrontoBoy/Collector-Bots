@@ -1,17 +1,17 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Mover))]
-[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(AnimationHandler))]
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]
 public class Unit : MonoBehaviour, IPoolable
 {
     protected Mover Mover; 
-    protected Animator Animator;
+    protected AnimationHandler AnimationHandler;
     
     protected virtual void Awake()
     {
         Mover = GetComponent<Mover>();
-        Animator = GetComponent<Animator>();
+        AnimationHandler = GetComponent<AnimationHandler>();
     }
 }

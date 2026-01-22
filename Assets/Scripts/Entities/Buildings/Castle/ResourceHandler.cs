@@ -12,7 +12,7 @@ public class ResourceHandler : MonoBehaviour
 
     private void Awake()
     {
-        _resourcesSpawner = ResourcesSpawner.СommonResourcesSpawner;
+        _resourcesSpawner = ResourcesSpawner.CommonResourcesSpawner;
     }
     
     private void OnEnable()

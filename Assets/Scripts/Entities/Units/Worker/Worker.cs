@@ -23,28 +23,22 @@ public class Worker : Unit
     
     private void OnEnable()
     {
-        Mover.TargetReached += OnTargetReached;
+        if (Mover != null)
+            Mover.TargetReached += OnTargetReached;
     }
     
     private void OnDisable()
     {
-        Mover.TargetReached -= OnTargetReached;
+        if (Mover != null)
+            Mover.TargetReached -= OnTargetReached;
     }
     
     private void FixedUpdate()
     {
-        if (Animator != null)
+        if (AnimationHandler != null)
         {
             bool isMoving = Mover != null && Mover.IsMoving;
-        
-            if (isMoving == true)
-            {
-                Animator.SetFloat("Speed", 1f);
-            }
-            else
-            {
-                Animator.SetFloat("Speed", 0f);
-            }
+            AnimationHandler.SetMoving(isMoving);
         }
     }
     
@@ -68,7 +62,9 @@ public class Worker : Unit
         if (_isFree)
         {
             _isFree = false;
-            _carrier.SetCarriedResource(null);
+            
+            if (_carrier != null)
+                _carrier.SetCarriedResource(null);
         }
         
         MoveToTarget(target);
@@ -85,8 +81,8 @@ public class Worker : Unit
         if (Mover != null)
             Mover.StopMove();
         
-        if (Animator != null)
-            Animator.SetFloat("Speed", 0f);
+        if (AnimationHandler != null)
+            AnimationHandler.SetMoving(false);
         
         BecameFree?.Invoke(this);
     }
@@ -96,15 +92,18 @@ public class Worker : Unit
         if (target != null && Mover != null)
             Mover.StartMove(target.Position);
         
-        if (Animator != null)
-            Animator.SetFloat("Speed", 1f);
+        if (AnimationHandler != null)
+            AnimationHandler.SetMoving(true);
     }
     
     private void OnTargetReached()
     {
         if (_carrier.IsCarrying == true)
         {
-            ResourceDelivered?.Invoke(this, _carrier.CarriedResource);
+            Resource resource = _carrier.CarriedResource;
+            
+            ResourceDelivered?.Invoke(this, resource);
+            
             _carrier.DetachResource();
             SetAsFree();
         }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,13 +6,13 @@ public class Scanner : MonoBehaviour
     [SerializeField] private float _radius = 100f;
     [SerializeField] private float _delay = 1f;
 
-    public event Action<Resource> ResourceFound;
-    
+    public event System.Action<Resource> ResourceFound;
+
     private void Start()
     {
         StartCoroutine(ScanRoutine());
     }
-    
+
     public void FindResources()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, _radius);
@@ -33,13 +32,13 @@ public class Scanner : MonoBehaviour
             }
         }
     }
-    
+
     private IEnumerator ScanRoutine()
     {
         while (enabled)
         {
             yield return new WaitForSeconds(_delay);
-            
+
             FindResources();
         }
     }

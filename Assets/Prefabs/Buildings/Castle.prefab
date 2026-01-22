@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 85080226533864621}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CastleUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,14 +24,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1274736407764158323}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.5, y: 32.82, z: 0}
+  m_LocalRotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 4.5, y: 31.5, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6180160730411836288}
   m_Father: {fileID: 849613669953858703}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
 --- !u!1 &2096280680296907773
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 4848067131581840697}
   - component: {fileID: 2305350618753776453}
   - component: {fileID: 1471428107438141648}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: ResourcesValueText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2096280680296907773}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00000017485323}
+  m_LocalPosition: {x: 0, y: 0, z: 0.00000023841744}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -66,7 +66,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0, y: -0.87}
+  m_AnchoredPosition: {x: 0.00000023841858, y: 0}
   m_SizeDelta: {x: 199, y: 49}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2305350618753776453
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 99.58674, y: 23.646187, z: 99.29691, w: 25.410933}
+  m_margin: {x: 99.49036, y: 25.316114, z: 99.475075, w: 25.843107}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -178,7 +178,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3606288404291252416}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: UnitSpawnPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 4527225608539647358}
   - component: {fileID: 1154620492980695195}
   - component: {fileID: 3391140909758868850}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 8659101077423409887}
   - component: {fileID: 6640096745487205296}
   - component: {fileID: 3479549302593467420}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DeliveryPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,6 +435,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Castle
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -475,6 +479,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
       insertIndex: -1
       addedObject: {fileID: -1991604537855534230}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5636140376528142106}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5333687654772219991}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5437560472112568178}
   m_SourcePrefab: {fileID: 100100000, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
 --- !u!1 &36520885302736437 stripped
 GameObject:
@@ -493,7 +506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b159414d806ad3f4993ce8bb66bc2170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Castle
-  Cost: 15
 --- !u!114 &-2933456717488768549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,6 +630,47 @@ MonoBehaviour:
   Prefab: {fileID: 3905642969416679853, guid: 0731ab68777ccc8498cd144d984d6bc4, type: 3}
   PoolCapacity: 10
   MaxPoolCapacity: 100
+--- !u!114 &5636140376528142106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36520885302736437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45522bf4a5d4fea478641a007d6c7990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingRenderer
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _clickedColor: {r: 0, g: 1, b: 0, a: 1}
+--- !u!114 &5333687654772219991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36520885302736437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c33ddab51204f942a28d318609a40aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlagHandler
+--- !u!114 &5437560472112568178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36520885302736437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dc8ffe656a615043a5a822b2252bab0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MarkersSpawner
+  SpawnPoints: []
+  Delay: 2
+  GameObjectsPool: {fileID: 0}
 --- !u!4 &849613669953858703 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
@@ -634,6 +687,10 @@ PrefabInstance:
     - target: {fileID: 6252897007884385645, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}
       propertyPath: m_Name
       value: SpawnPoint (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6252897007884385645, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8367338876110859362, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}
       propertyPath: m_LocalPosition.x
@@ -708,6 +765,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnPoint (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6252897007884385645, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8367338876110859362, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.162
@@ -780,6 +841,10 @@ PrefabInstance:
     - target: {fileID: 6252897007884385645, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}
       propertyPath: m_Name
       value: SpawnPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 6252897007884385645, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8367338876110859362, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}
       propertyPath: m_LocalPosition.x

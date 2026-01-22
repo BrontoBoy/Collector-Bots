@@ -8,6 +8,7 @@ public class WorkerHandler : MonoBehaviour
     [SerializeField] private int _maxWorkers = 10;
     
     private Queue<Worker> _freeWorkers = new Queue<Worker>();
+    private HashSet<Worker> _freeWorkersSet = new HashSet<Worker>();
     
     public bool HasFreeWorkers => _freeWorkers.Count > 0;
     public int WorkersCount => _workers.Count;
@@ -17,26 +18,28 @@ public class WorkerHandler : MonoBehaviour
     public void Initialize()
     {
         _freeWorkers.Clear();
-        
+        _freeWorkersSet.Clear();
+
         foreach (var worker in _workers)
         {
             if (worker != null)
-                _freeWorkers.Enqueue(worker);
+                EnqueueFreeWorker(worker);
         }
     }
     
     public Worker GetFreeWorker()
     {
         CleanQueue();
-        
-        if (_freeWorkers.Count == 0)
-            return null;
-            
-        Worker worker = _freeWorkers.Dequeue();
-        
-        if (worker != null && worker.IsFree)
-            return worker;
-            
+
+        while (_freeWorkers.Count > 0)
+        {
+            Worker worker = _freeWorkers.Dequeue();
+            _freeWorkersSet.Remove(worker);
+
+            if (worker != null && worker.IsFree)
+                return worker;
+        }
+
         return null;
     }
     
@@ -44,27 +47,19 @@ public class WorkerHandler : MonoBehaviour
     {
         if (worker != null && worker.IsFree)
         {
-            bool alreadyInQueue = false;
-            
-            foreach (var w in _freeWorkers)
+            if (_freeWorkersSet.Contains(worker) == false)
             {
-                if (w == worker)
-                {
-                    alreadyInQueue = true;
-                    break;
-                }
-            }
-            
-            if (alreadyInQueue == false)
                 _freeWorkers.Enqueue(worker);
+                _freeWorkersSet.Add(worker);
+            }
         }
     }
     
     public void AddWorker(Worker worker)
     {
-        if(_workers.Count == _maxWorkers)
+        if (_workers.Count == _maxWorkers)
             return;
-        
+
         if (worker != null && _workers.Contains(worker) == false)
         {
             _workers.Add(worker);
@@ -72,21 +67,32 @@ public class WorkerHandler : MonoBehaviour
         }
     }
     
+    private void EnqueueFreeWorker(Worker worker)
+    {
+        if (worker == null)
+            return;
+
+        if (_freeWorkersSet.Add(worker))
+            _freeWorkers.Enqueue(worker);
+    }
+    
     private void CleanQueue()
     {
         List<Worker> validWorkers = new List<Worker>();
-        
+
         while (_freeWorkers.Count > 0)
         {
             Worker worker = _freeWorkers.Dequeue();
-            
+            _freeWorkersSet.Remove(worker);
+
             if (worker != null && worker.IsFree)
                 validWorkers.Add(worker);
         }
-        
+
         foreach (Worker worker in validWorkers)
         {
             _freeWorkers.Enqueue(worker);
+            _freeWorkersSet.Add(worker);
         }
     }
 }

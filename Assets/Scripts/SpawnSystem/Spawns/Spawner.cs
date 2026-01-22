@@ -35,7 +35,8 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
 
     public void StartSpawning()
     {
-        Coroutine = StartCoroutine(Spawning());
+        if (Coroutine == null)
+            Coroutine = StartCoroutine(Spawning());
     }
 
     private IEnumerator Spawning()

@@ -6,45 +6,67 @@ using UnityEngine;
 [RequireComponent(typeof(WorkerHandler))]
 [RequireComponent(typeof(CastleUI))]
 [RequireComponent(typeof(UnitsSpawner))]
+[RequireComponent(typeof(BuildingRenderer))]
+[RequireComponent(typeof(FlagHandler))]
+[RequireComponent(typeof(MarkersSpawner))]
 public class Castle : Building
 {
     private Storage _storage;
     private Scanner _scanner;
     private ResourceHandler _resourceHandler;
     private WorkerHandler _workerHandler;
-	private CastleUI _castleUI;
-	private UnitsSpawner _unitsSpawner;
+    private CastleUI _castleUI;
+    private UnitsSpawner _unitsSpawner;
+    private FlagHandler _flagHandler;
     
-    private void Awake()
+    public bool HasFlag => _flagHandler != null && _flagHandler.HasFlag;
+    public Flag Flag => _flagHandler?.Flag;
+    
+    protected override void Awake()
     {
+        base.Awake();
+        
         _scanner = GetComponent<Scanner>();
         _storage = GetComponent<Storage>();
         _resourceHandler = GetComponent<ResourceHandler>();
         _workerHandler = GetComponent<WorkerHandler>();
-		_castleUI = GetComponent<CastleUI>();
-		_unitsSpawner = GetComponent<UnitsSpawner>();
+        _castleUI = GetComponent<CastleUI>();
+        _unitsSpawner = GetComponent<UnitsSpawner>();
+        _flagHandler = GetComponent<FlagHandler>();
     }
     
     private void Start()
     {
         _workerHandler.Initialize();
-		UpdateCastleUI();
+        UpdateCastleUI();
     }
 
     private void OnEnable()
     {
         _scanner.ResourceFound += OnResourceFound;
         _resourceHandler.ResourcesListUpdated += OnResourcesListUpdated;
-		_storage.ResourcesChanged += OnStorageResourcesChanged;
+        _storage.ResourcesChanged += OnStorageResourcesChanged;
     }
 
     private void OnDisable()
     {
         _scanner.ResourceFound -= OnResourceFound;
         _resourceHandler.ResourcesListUpdated -= OnResourcesListUpdated;
-		_storage.ResourcesChanged -= OnStorageResourcesChanged;
+        _storage.ResourcesChanged -= OnStorageResourcesChanged;
     }
 
+    public void PlaceFlag(Vector3 position)
+    {
+        if (_flagHandler != null)
+            _flagHandler.PlaceFlag(position);
+    }
+    
+    public void RemoveFlag()
+    {
+        if (_flagHandler != null)
+            _flagHandler.RemoveFlag();
+    }
+    
     private void OnResourceFound(Resource resource)
     {
         _resourceHandler.AddResource(resource);

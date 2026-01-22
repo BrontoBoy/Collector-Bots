@@ -8,8 +8,6 @@ public class CastleUI : MonoBehaviour
     public void UpdateResourcesDisplay(int resourcesCount)
     {
         if (_resourcesText != null)
-        {
             _resourcesText.text = $"{resourcesCount}";
-        }
     }
 }

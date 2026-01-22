@@ -47,7 +47,7 @@ public class Storage : MonoBehaviour
             
             AddResource();
             
-            ResourcesSpawner.СommonResourcesSpawner?.ReturnResource(resource);
+            ResourcesSpawner.CommonResourcesSpawner?.ReturnResource(resource);
             worker.SetAsFree();
         }
     }

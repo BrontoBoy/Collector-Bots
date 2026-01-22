@@ -13,6 +13,7 @@ public class UnitsSpawner : Spawner<Unit>
         if (Pool != null && SpawnPointsList != null && SpawnPointsList.Count > 0)
         {
             Unit unit = Pool.GetObject();
+            
             if (unit != null)
             {
                 int randomIndex = Random.Range(0, SpawnPointsList.Count);

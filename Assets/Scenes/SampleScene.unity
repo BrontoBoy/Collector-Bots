@@ -623,30 +623,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Castle
       objectReference: {fileID: 0}
-    - target: {fileID: 85080226533864621, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 4.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 85080226533864621, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 31.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 85080226533864621, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 85080226533864621, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.92387956
-      objectReference: {fileID: 0}
-    - target: {fileID: 85080226533864621, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.38268343
-      objectReference: {fileID: 0}
-    - target: {fileID: 85080226533864621, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -45
-      objectReference: {fileID: 0}
     - target: {fileID: 849613669953858703, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.181
@@ -687,22 +663,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1471428107438141648, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_margin.w
-      value: 25.843107
-      objectReference: {fileID: 0}
-    - target: {fileID: 1471428107438141648, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_margin.x
-      value: 99.49036
-      objectReference: {fileID: 0}
-    - target: {fileID: 1471428107438141648, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_margin.y
-      value: 25.316114
-      objectReference: {fileID: 0}
-    - target: {fileID: 1471428107438141648, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_margin.z
-      value: 99.475075
-      objectReference: {fileID: 0}
     - target: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: '_workers.Array.data[0]'
       value: 
@@ -719,42 +679,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 330585545}
-    - target: {fileID: 4848067131581840697, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4848067131581840697, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4848067131581840697, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4848067131581840697, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4848067131581840697, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 199
-      objectReference: {fileID: 0}
-    - target: {fileID: 4848067131581840697, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 49
-      objectReference: {fileID: 0}
-    - target: {fileID: 4848067131581840697, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.00000023841744
-      objectReference: {fileID: 0}
-    - target: {fileID: 4848067131581840697, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.00000023841858
-      objectReference: {fileID: 0}
-    - target: {fileID: 4848067131581840697, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1165,7 +1089,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 331995566}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1951,6 +1875,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2885a9027f5aa2d4d85a4db5513754c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputReader
+  _buildingLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!4 &625859675
 Transform:
   m_ObjectHideFlags: 0
@@ -2133,7 +2063,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5046245557263983630}
@@ -4294,7 +4224,8 @@ GameObject:
   - component: {fileID: 1334981195}
   - component: {fileID: 1334981194}
   - component: {fileID: 1334981197}
-  m_Layer: 0
+  - component: {fileID: 1334981198}
+  m_Layer: 8
   m_Name: GroundModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4422,6 +4353,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1334981198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334981192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e54190fffb3a52f4a8adf018acf459ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ground
 --- !u!1001 &1344486237
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5020,7 +4963,7 @@ MonoBehaviour:
   - {fileID: 1131394038}
   - {fileID: 2110172204}
   - {fileID: 325319056}
-  Delay: 0.5
+  Delay: 0.1
   GameObjectsPool: {fileID: 1503422246}
 --- !u!114 &1503422246
 MonoBehaviour:
