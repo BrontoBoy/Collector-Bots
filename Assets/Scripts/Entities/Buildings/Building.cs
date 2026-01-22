@@ -2,7 +2,6 @@ using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(BuildingRenderer))]
-
 public class Building : MonoBehaviour, IPoolable, ITargetable
 {
     protected BuildingRenderer BuildingRenderer;

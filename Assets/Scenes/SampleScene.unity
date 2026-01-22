@@ -619,6 +619,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -2933456717488768549, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+      propertyPath: _radius
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 36520885302736437, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: m_Name
       value: Castle
@@ -1841,6 +1845,7 @@ GameObject:
   - component: {fileID: 625859675}
   - component: {fileID: 625859674}
   - component: {fileID: 625859673}
+  - component: {fileID: 625859676}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -1860,6 +1865,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ecece1cd6d1b2c45bda97465a2a3d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game
+  _resourceHandler: {fileID: 625859676}
   _resourcesSpawner: {fileID: 1503422245}
   _castles:
   - {fileID: 2109912162}
@@ -1896,6 +1902,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &625859676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625859672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e75141ef5ff3e104bae9bdee79c6bc41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceHandler
 --- !u!1001 &626641078
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -488,6 +488,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5437560472112568178}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7665329444627832900}
   m_SourcePrefab: {fileID: 100100000, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
 --- !u!1 &36520885302736437 stripped
 GameObject:
@@ -670,7 +673,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MarkersSpawner
   SpawnPoints: []
   Delay: 2
-  GameObjectsPool: {fileID: 0}
+  GameObjectsPool: {fileID: -7665329444627832900}
+--- !u!114 &-7665329444627832900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36520885302736437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8155f678a3f57145bf4e6b57d418a49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MarkersPool
+  Prefab: {fileID: -8179781346430652744, guid: 952c1d297b444524c9c6460f6f3e82a7, type: 3}
+  PoolCapacity: 15
+  MaxPoolCapacity: 100
 --- !u!4 &849613669953858703 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}

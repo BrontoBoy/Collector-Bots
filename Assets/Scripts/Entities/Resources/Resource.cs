@@ -49,6 +49,6 @@ public class Resource : MonoBehaviour, IPoolable, ITargetable
         if (collider != null)
             collider.enabled = true;
         
-            transform.SetParent(null);
+        transform.SetParent(null);
     }
 }
