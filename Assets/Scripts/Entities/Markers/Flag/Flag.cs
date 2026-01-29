@@ -1,1 +1,0 @@
-public class Flag : Marker, IPoolable, ITargetable { }

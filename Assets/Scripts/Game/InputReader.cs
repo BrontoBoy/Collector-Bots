@@ -1,14 +1,15 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class InputReader : MonoBehaviour
 {
     public const int LeftMouseButtonIndex = 0;
     public const int RightMouseButtonIndex = 1;
     
-    [SerializeField] private LayerMask _buildingLayer;
+    [SerializeField] private LayerMask _castleLayer;
     [SerializeField] private LayerMask _groundLayer;
     
-    private Building _selectedBuilding;
+    private Castle _selectedCastle;
     
     public event System.Action<Castle> CastleSelected;
     public event System.Action<Castle> CastleDeselected;
@@ -27,47 +28,41 @@ public class InputReader : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _buildingLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _castleLayer))
         {
-            if (hit.collider.TryGetComponent<Building>(out Building building))
-                SelectBuilding(building);
+            if (hit.collider.TryGetComponent<Castle>(out Castle castle))
+                SelectCastle(castle);
         }
         else
         {
-            DeselectCurrentBuilding();
+            DeselectCurrentCastle();
         }
     }
     
     private void HandleRightClick()
     {
-        if (_selectedBuilding is Castle selectedCastle)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _groundLayer))
-                GroundRightClicked?.Invoke(hit.point);
-        }
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _groundLayer))
+            GroundRightClicked?.Invoke(hit.point);
     }
     
-    private void SelectBuilding(Building building)
+    private void SelectCastle(Castle castle)
     {
-        DeselectCurrentBuilding();
-        _selectedBuilding = building;
-        building.Select();
-        
-        if (building is Castle castle)
-            CastleSelected?.Invoke(castle);
+        DeselectCurrentCastle();
+        _selectedCastle = castle;
+        castle.Select();
+        CastleSelected?.Invoke(castle);
     }
     
-    private void DeselectCurrentBuilding()
+    private void DeselectCurrentCastle()
     {
-        if (_selectedBuilding != null)
+        if (_selectedCastle != null)
         {
-            if (_selectedBuilding is Castle castle)
-                CastleDeselected?.Invoke(castle);
+            CastleDeselected?.Invoke(_selectedCastle);
             
-            _selectedBuilding.Deselect();
-            _selectedBuilding = null;
+            _selectedCastle.Deselect();
+            _selectedCastle = null;
         }
     }
 }

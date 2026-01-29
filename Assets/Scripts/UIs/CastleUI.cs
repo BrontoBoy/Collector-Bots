@@ -5,7 +5,7 @@ public class CastleUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _resourcesText;
 
-    public void UpdateResourcesDisplay(int resourcesCount)
+    public void UpdateGoldsDisplay(int resourcesCount)
     {
         if (_resourcesText != null)
             _resourcesText.text = $"{resourcesCount}";

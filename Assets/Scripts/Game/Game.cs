@@ -1,150 +1,90 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(InputReader))]
 public class Game : MonoBehaviour
 {
-    [Header("Managers")]
-    [SerializeField] private ResourceHandler _resourceHandler;   // назначить в инспекторе
-    [SerializeField] private ResourcesSpawner _resourcesSpawner; // назначить в инспекторе
-
-    [Header("World")]
-    [SerializeField] private List<Castle> _castles = new List<Castle>(); // все замки сцены, назначить в инспекторе
-
+    [SerializeField] private GoldHandler _goldHandler;
+    [SerializeField] private List<Castle> _castles = new List<Castle>();
+    
     private InputReader _inputReader;
-
-    // Удалите или закомментируйте вызов InitializeCastleSubscriptions() из Awake
+    
     private void Awake()
     {
         _inputReader = GetComponent<InputReader>();
-        // НЕ ВЫЗЫВАЕМ InitializeCastleSubscriptions() здесь — Castle.Awake может ещё не выполниться
     }
-
-    // Переносим инициализацию в Start
-    private void Start()
+    
+    private void OnEnable()
     {
-        // Сначала подписываемся на сканеры и запускаем их
-        InitializeCastleSubscriptions();
-
-        // Затем запускаем спавн ресурсов
-        if (_resourcesSpawner != null)
-            _resourcesSpawner.StartSpawning();
-    }
-
-    private void OnDestroy()
-    {
-        UnsubscribeFromCastleScanners();
-    }
-
-
-    private void InitializeCastleSubscriptions()
-    {
-        if (_castles == null || _castles.Count == 0)
-            return;
-
-        // Сначала подписываемся на события всех сканеров
-        for (int i = 0; i < _castles.Count; i++)
+        foreach (Castle castle in _castles)
         {
-            Castle castle = _castles[i];
-            if (castle == null)
-                continue;
-
-            Scanner scanner = castle.Scanner;
-            if (scanner == null)
-                continue;
-
-            scanner.ResourceFoundAtPosition += OnScannerResourceFound;
-        }
-
-        // Затем запускаем сканирование у всех сканеров
-        for (int i = 0; i < _castles.Count; i++)
-        {
-            Castle castle = _castles[i];
-            if (castle == null)
-                continue;
-
-            Scanner scanner = castle.Scanner;
-            if (scanner == null)
-                continue;
-
-            scanner.StartScanning();
-        }
-    }
-
-    private void UnsubscribeFromCastleScanners()
-    {
-        if (_castles == null || _castles.Count == 0)
-            return;
-
-        for (int i = 0; i < _castles.Count; i++)
-        {
-            Castle castle = _castles[i];
-            if (castle == null)
-                continue;
-
-            Scanner scanner = castle.Scanner;
-            if (scanner == null)
-                continue;
-
-            scanner.ResourceFoundAtPosition -= OnScannerResourceFound;
-        }
-    }
-
-    // Вызывается сканером (через событие)
-    private void OnScannerResourceFound(Vector3 position)
-    {
-        if (_resourceHandler == null)
-            return;
-
-        // Добавляем ресурс в общий обработчик (ResourceHandler)
-        _resourceHandler.AddResourceAtPosition(position);
-
-        // Пытаемся назначить ближайший свободный рабочий из всех замков
-        TryAssignNearestWorker(position);
-    }
-
-    private void TryAssignNearestWorker(Vector3 resourcePosition)
-    {
-        if (_castles == null || _castles.Count == 0)
-            return;
-
-        float bestDistance = float.MaxValue;
-        Castle bestCastle = null;
-
-        for (int i = 0; i < _castles.Count; i++)
-        {
-            Castle castle = _castles[i];
-            if (castle == null)
-                continue;
-
-            WorkerHandler wh = castle.WorkerHandler;
-            if (wh == null || wh.HasFreeWorkers == false)
-                continue;
-
-            float dist = Vector3.Distance(castle.transform.position, resourcePosition);
-            if (dist < bestDistance)
+            if (castle != null && castle.Scanner != null)
             {
-                bestDistance = dist;
-                bestCastle = castle;
+                castle.Scanner.GoldFound += OnGoldFound;
+            
+                if (castle.WorkerHandler != null)
+                    foreach (Worker worker in castle.WorkerHandler.Workers)
+                        if (worker != null)
+                            worker.GoldDelivered += OnGoldDelivered;
             }
         }
-
-        if (bestCastle == null)
-            return;
-
-        // Получаем ближайший ресурс относительно выбранного замка
-        Resource nearest = _resourceHandler.GetNearestResource(bestCastle.transform.position);
-        if (nearest == null)
-            return;
-
-        // Попросим замок назначить рабочего
-        bool assigned = bestCastle.TryAssignWorkerToResource(nearest);
-
-        // Если назначение успешно — удаляем ресурс из общего списка
-        if (assigned)
-            _resourceHandler.RemoveResource(nearest);
     }
 
-    // Публичный доступ к ResourceHandler (если нужен)
-    public ResourceHandler ResourceHandler => _resourceHandler;
+    private void OnDisable()
+    {
+        foreach (Castle castle in _castles)
+        {
+            if (castle != null && castle.Scanner != null)
+            {
+                castle.Scanner.GoldFound -= OnGoldFound;
+            
+                if (castle.WorkerHandler != null)
+                    foreach (Worker worker in castle.WorkerHandler.Workers)
+                        if (worker != null)
+                            worker.GoldDelivered -= OnGoldDelivered;
+            }
+        }
+    }
+    
+    private void Start()
+    {
+        StartGoldSpawning();
+    }
+    
+    private void StartGoldSpawning()
+    {
+        if (_goldHandler.GoldsSpawner != null)
+            _goldHandler.GoldsSpawner.StartSpawning();
+    }
+    
+    private Castle GetNearestCastle()
+    {
+        List<Castle> sortedCastles = new List<Castle>();
+        
+        sortedCastles = _castles.Where(castle => castle != null)
+            .OrderBy(castle => Vector3.Distance(castle.transform.position, castle.transform.position)).ToList();
+        
+        return sortedCastles[0];
+    }
+    
+    private void OnGoldFound(Gold gold)
+    {
+        Castle nearestCastle = GetNearestCastle();
+        
+        Worker freeWorker = nearestCastle.WorkerHandler.GetFreeWorker();
+        
+        if(freeWorker == null)
+            return;
+        
+        nearestCastle.Scanner.AddGold(gold);
+        _goldHandler.RemoveGold(gold);
+        freeWorker.SetTarget(gold);
+        nearestCastle.Scanner.RemoveGold(gold);
+    }
+
+    private void OnGoldDelivered(Worker worker, Gold gold)
+    {
+        _goldHandler.ReturnGoldToPool(gold);
+    }
 }

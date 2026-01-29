@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-public class TargetPoint : MonoBehaviour, ITargetable
+public class Flag : MonoBehaviour, ITargetable
 {
     public Vector3 Position => transform.position;
 }

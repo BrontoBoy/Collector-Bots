@@ -1,0 +1,1 @@
+public class CastlesPool : GameObjectsPool<Castle> { }

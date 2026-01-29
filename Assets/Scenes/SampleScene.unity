@@ -667,6 +667,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3479549302593467420, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+      propertyPath: _workerCost
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: '_workers.Array.data[0]'
       value: 
@@ -683,7 +691,8 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 330585545}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1093,6 +1102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 331995566}
+  - component: {fileID: 331995567}
   m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
@@ -1116,6 +1126,33 @@ Transform:
   - {fileID: 1334981193}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &331995567
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331995565}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &342966241
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1846,6 +1883,8 @@ GameObject:
   - component: {fileID: 625859674}
   - component: {fileID: 625859673}
   - component: {fileID: 625859676}
+  - component: {fileID: 625859677}
+  - component: {fileID: 625859678}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -1865,8 +1904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ecece1cd6d1b2c45bda97465a2a3d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game
-  _resourceHandler: {fileID: 625859676}
-  _resourcesSpawner: {fileID: 1503422245}
+  _goldHandler: {fileID: 625859676}
   _castles:
   - {fileID: 2109912162}
 --- !u!114 &625859674
@@ -1881,9 +1919,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2885a9027f5aa2d4d85a4db5513754c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputReader
-  _buildingLayer:
+  _castleLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   _groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -1899,7 +1937,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1655343608}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &625859676
@@ -1914,6 +1953,116 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e75141ef5ff3e104bae9bdee79c6bc41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceHandler
+--- !u!114 &625859677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625859672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871a14ab348210a49b4fba8bb3acd646, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoldsSpawner
+  SpawnPoints:
+  - {fileID: 5046245557263983631}
+  - {fileID: 1436549201}
+  - {fileID: 1638964992}
+  - {fileID: 1964307628}
+  - {fileID: 471066571}
+  - {fileID: 1130668304}
+  - {fileID: 1899424220}
+  - {fileID: 1694680162}
+  - {fileID: 379137160}
+  - {fileID: 1737564840}
+  - {fileID: 1986812316}
+  - {fileID: 1161077194}
+  - {fileID: 1422555245}
+  - {fileID: 1642632251}
+  - {fileID: 1358393057}
+  - {fileID: 1821355025}
+  - {fileID: 1397509693}
+  - {fileID: 1314909736}
+  - {fileID: 1204924960}
+  - {fileID: 1344486239}
+  - {fileID: 1835448127}
+  - {fileID: 2011155203}
+  - {fileID: 699764182}
+  - {fileID: 2081882148}
+  - {fileID: 1634748350}
+  - {fileID: 1276471215}
+  - {fileID: 855360029}
+  - {fileID: 1181960457}
+  - {fileID: 1320548360}
+  - {fileID: 1889495016}
+  - {fileID: 1140793751}
+  - {fileID: 1413193408}
+  - {fileID: 1599635802}
+  - {fileID: 1173481811}
+  - {fileID: 1965182910}
+  - {fileID: 756498575}
+  - {fileID: 2041344998}
+  - {fileID: 1245662100}
+  - {fileID: 1405974848}
+  - {fileID: 1837025027}
+  - {fileID: 2074677538}
+  - {fileID: 2141226486}
+  - {fileID: 2029571773}
+  - {fileID: 1941398189}
+  - {fileID: 1272179759}
+  - {fileID: 2088989235}
+  - {fileID: 1926692423}
+  - {fileID: 1935534522}
+  - {fileID: 2103971292}
+  - {fileID: 1594180056}
+  - {fileID: 2125205748}
+  - {fileID: 1467688993}
+  - {fileID: 1910813064}
+  - {fileID: 1786347064}
+  - {fileID: 2027156280}
+  - {fileID: 1592033149}
+  - {fileID: 398317639}
+  - {fileID: 2081528339}
+  - {fileID: 825232369}
+  - {fileID: 869250687}
+  - {fileID: 1678895838}
+  - {fileID: 1114764213}
+  - {fileID: 1158574404}
+  - {fileID: 1789517370}
+  - {fileID: 1767529607}
+  - {fileID: 1425494310}
+  - {fileID: 1796772374}
+  - {fileID: 1582016364}
+  - {fileID: 2039255913}
+  - {fileID: 876161278}
+  - {fileID: 1876717502}
+  - {fileID: 2099520943}
+  - {fileID: 1561468235}
+  - {fileID: 1047540309}
+  - {fileID: 1023794575}
+  - {fileID: 1300082037}
+  - {fileID: 924460613}
+  - {fileID: 1131394038}
+  - {fileID: 2110172204}
+  - {fileID: 325319056}
+  GameObjectsPool: {fileID: 625859678}
+  _spawnDelay: 0.5
+--- !u!114 &625859678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625859672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e230275607e555438cfe6fc0e0fe4fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoldsPool
+  Prefab: {fileID: -3386651264075550019, guid: 4d07f33428d0c20498e6aec02eeed599, type: 3}
+  PoolCapacity: 15
+  MaxPoolCapacity: 100
 --- !u!1001 &626641078
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2164,7 +2313,7 @@ Transform:
   - {fileID: 1131394037}
   - {fileID: 2110172203}
   - {fileID: 48175188}
-  m_Father: {fileID: 1503422244}
+  m_Father: {fileID: 1655343608}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &697777639
 PrefabInstance:
@@ -4854,150 +5003,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8b9c066f6adc34386ad95b95464ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnPoint
---- !u!1 &1503422243
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1503422244}
-  - component: {fileID: 1503422246}
-  - component: {fileID: 1503422245}
-  m_Layer: 0
-  m_Name: ResourcesSpawnSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1503422244
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1503422243}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 689300347}
-  m_Father: {fileID: 1655343608}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1503422245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1503422243}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 871a14ab348210a49b4fba8bb3acd646, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GoldSpawner
-  SpawnPoints:
-  - {fileID: 5046245557263983631}
-  - {fileID: 1436549201}
-  - {fileID: 1638964992}
-  - {fileID: 1964307628}
-  - {fileID: 471066571}
-  - {fileID: 1130668304}
-  - {fileID: 1899424220}
-  - {fileID: 1694680162}
-  - {fileID: 379137160}
-  - {fileID: 1737564840}
-  - {fileID: 1986812316}
-  - {fileID: 1161077194}
-  - {fileID: 1422555245}
-  - {fileID: 1642632251}
-  - {fileID: 1358393057}
-  - {fileID: 1821355025}
-  - {fileID: 1397509693}
-  - {fileID: 1314909736}
-  - {fileID: 1204924960}
-  - {fileID: 1344486239}
-  - {fileID: 1835448127}
-  - {fileID: 2011155203}
-  - {fileID: 699764182}
-  - {fileID: 2081882148}
-  - {fileID: 1634748350}
-  - {fileID: 1276471215}
-  - {fileID: 855360029}
-  - {fileID: 1181960457}
-  - {fileID: 1320548360}
-  - {fileID: 1889495016}
-  - {fileID: 1140793751}
-  - {fileID: 1413193408}
-  - {fileID: 1599635802}
-  - {fileID: 1173481811}
-  - {fileID: 1965182910}
-  - {fileID: 756498575}
-  - {fileID: 2041344998}
-  - {fileID: 1245662100}
-  - {fileID: 1405974848}
-  - {fileID: 1837025027}
-  - {fileID: 2074677538}
-  - {fileID: 2141226486}
-  - {fileID: 2029571773}
-  - {fileID: 1941398189}
-  - {fileID: 1272179759}
-  - {fileID: 2088989235}
-  - {fileID: 1926692423}
-  - {fileID: 1935534522}
-  - {fileID: 2103971292}
-  - {fileID: 1594180056}
-  - {fileID: 2125205748}
-  - {fileID: 1467688993}
-  - {fileID: 1910813064}
-  - {fileID: 1786347064}
-  - {fileID: 2027156280}
-  - {fileID: 1592033149}
-  - {fileID: 398317639}
-  - {fileID: 2081528339}
-  - {fileID: 825232369}
-  - {fileID: 869250687}
-  - {fileID: 1678895838}
-  - {fileID: 1114764213}
-  - {fileID: 1158574404}
-  - {fileID: 1789517370}
-  - {fileID: 1767529607}
-  - {fileID: 1425494310}
-  - {fileID: 1796772374}
-  - {fileID: 1582016364}
-  - {fileID: 2039255913}
-  - {fileID: 876161278}
-  - {fileID: 1876717502}
-  - {fileID: 2099520943}
-  - {fileID: 1561468235}
-  - {fileID: 1047540309}
-  - {fileID: 1023794575}
-  - {fileID: 1300082037}
-  - {fileID: 924460613}
-  - {fileID: 1131394038}
-  - {fileID: 2110172204}
-  - {fileID: 325319056}
-  Delay: 0.1
-  GameObjectsPool: {fileID: 1503422246}
---- !u!114 &1503422246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1503422243}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e230275607e555438cfe6fc0e0fe4fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GoldPool
-  Prefab: {fileID: -3386651264075550019, guid: 4d07f33428d0c20498e6aec02eeed599, type: 3}
-  PoolCapacity: 15
-  MaxPoolCapacity: 100
 --- !u!1001 &1532858824
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5540,13 +5545,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1655343607}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1503422244}
-  m_Father: {fileID: 0}
+  - {fileID: 689300347}
+  m_Father: {fileID: 625859675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1678895836
 PrefabInstance:
@@ -7218,6 +7223,5 @@ SceneRoots:
   - {fileID: 832974996}
   - {fileID: 102728608}
   - {fileID: 1532858824}
-  - {fileID: 1655343608}
   - {fileID: 625859675}
   - {fileID: 642582213}
