@@ -9,10 +9,8 @@ public class GameObjectsPool<T> : MonoBehaviour where T : MonoBehaviour
     [SerializeField] protected int MaxPoolCapacity = 100;
     
     protected ObjectPool<T> Pool;
-    protected List<T> ActiveObjects = new List<T>();
     
-    
-    private void OnValidate()
+    protected void OnValidate()
     {
         if (PoolCapacity > MaxPoolCapacity)
             PoolCapacity = MaxPoolCapacity - 1;
@@ -34,25 +32,6 @@ public class GameObjectsPool<T> : MonoBehaviour where T : MonoBehaviour
             return;
         
         Pool.Release(item);
-    }
-    
-    public virtual void ReturnAll()
-    {
-        List<T> activeCopy = new List<T>(ActiveObjects);
-        
-        foreach (T item in activeCopy)
-        {
-            if (item != null && item.gameObject.activeInHierarchy)
-                ReturnObject(item);
-        }
-        
-        ActiveObjects.Clear();
-    }
-    
-    public virtual void ClearPool()
-    {
-        Pool.Clear();
-        ActiveObjects.Clear();
     }
     
     protected virtual void InitializePool()
@@ -83,14 +62,12 @@ public class GameObjectsPool<T> : MonoBehaviour where T : MonoBehaviour
     {
         item.transform.SetParent(null);
         item.gameObject.SetActive(true);
-        ActiveObjects.Add(item);
     }
     
     protected virtual void OnReturnedToPool(T item)
     {
         item.gameObject.SetActive(false);
         item.transform.SetParent(transform);
-        ActiveObjects.Remove(item);
     }
     
     protected virtual void OnDestroyPoolObject(T item)
@@ -109,8 +86,6 @@ public class GameObjectsPool<T> : MonoBehaviour where T : MonoBehaviour
         }
         
         foreach (T item in items)
-        {
             Pool.Release(item);
-        }
     }
 }

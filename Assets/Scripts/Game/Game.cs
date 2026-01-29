@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(InputReader))]
+[RequireComponent(typeof(GoldHandler))]
+[RequireComponent(typeof(CastlesHandler))]
 public class Game : MonoBehaviour
 {
     [SerializeField] private GoldHandler _goldHandler;
-    [SerializeField] private List<Castle> _castles = new List<Castle>();
+    [SerializeField] private CastlesHandler _castlesHandler;
     
     private InputReader _inputReader;
     
@@ -17,32 +17,24 @@ public class Game : MonoBehaviour
     
     private void OnEnable()
     {
-        foreach (Castle castle in _castles)
+        foreach (Castle castle in _castlesHandler.Castles)
         {
             if (castle != null && castle.Scanner != null)
             {
                 castle.Scanner.GoldFound += OnGoldFound;
-            
-                if (castle.WorkerHandler != null)
-                    foreach (Worker worker in castle.WorkerHandler.Workers)
-                        if (worker != null)
-                            worker.GoldDelivered += OnGoldDelivered;
+                castle.GoldDelivered += OnGoldDelivered;
             }
         }
     }
 
     private void OnDisable()
     {
-        foreach (Castle castle in _castles)
+        foreach (Castle castle in _castlesHandler.Castles)
         {
             if (castle != null && castle.Scanner != null)
             {
                 castle.Scanner.GoldFound -= OnGoldFound;
-            
-                if (castle.WorkerHandler != null)
-                    foreach (Worker worker in castle.WorkerHandler.Workers)
-                        if (worker != null)
-                            worker.GoldDelivered -= OnGoldDelivered;
+                castle.GoldDelivered -= OnGoldDelivered;
             }
         }
     }
@@ -58,33 +50,34 @@ public class Game : MonoBehaviour
             _goldHandler.GoldsSpawner.StartSpawning();
     }
     
-    private Castle GetNearestCastle()
-    {
-        List<Castle> sortedCastles = new List<Castle>();
-        
-        sortedCastles = _castles.Where(castle => castle != null)
-            .OrderBy(castle => Vector3.Distance(castle.transform.position, castle.transform.position)).ToList();
-        
-        return sortedCastles[0];
-    }
-    
     private void OnGoldFound(Gold gold)
     {
-        Castle nearestCastle = GetNearestCastle();
-        
-        Worker freeWorker = nearestCastle.WorkerHandler.GetFreeWorker();
-        
-        if(freeWorker == null)
+        if(_goldHandler.IsGoldInHandler(gold))
             return;
         
-        nearestCastle.Scanner.AddGold(gold);
-        _goldHandler.RemoveGold(gold);
-        freeWorker.SetTarget(gold);
-        nearestCastle.Scanner.RemoveGold(gold);
-    }
+        _goldHandler.AddGold(gold);
+        Castle nearestCastle = _castlesHandler.GetNearestCastle(gold.transform.position);
+        
+        if (nearestCastle == null)
+            return;
+        
+        Worker freeWorker = nearestCastle.WorkerHandler.GetFreeWorker();
 
-    private void OnGoldDelivered(Worker worker, Gold gold)
+        if (freeWorker == null)
+            return;
+        
+        freeWorker.SetTarget(gold);
+    }
+    
+    private void OnGoldDelivered(Castle castle, Worker worker, Gold gold)
     {
-        _goldHandler.ReturnGoldToPool(gold);
+        if(castle ==null || worker == null || gold == null )
+            return;
+        
+        _goldHandler.RemoveGold(gold);
+        castle.Scanner.RemoveGold(gold);
+        _goldHandler.ReturnGoldToPool(gold); 
+        castle.Storage.AddGold(); 
+        worker.SetAsFree(); 
     }
 }

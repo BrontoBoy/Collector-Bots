@@ -1,10 +1,9 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class InputReader : MonoBehaviour
 {
-    public const int LeftMouseButtonIndex = 0;
-    public const int RightMouseButtonIndex = 1;
+    private const int LeftMouseButtonIndex = 0;
+    private const int RightMouseButtonIndex = 1;
     
     [SerializeField] private LayerMask _castleLayer;
     [SerializeField] private LayerMask _groundLayer;

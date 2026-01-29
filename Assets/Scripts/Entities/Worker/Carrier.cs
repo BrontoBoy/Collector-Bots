@@ -20,6 +20,5 @@ public class Carrier : MonoBehaviour
     
     public void DetachGold()
     {
-        TargetGold.transform.SetParent(null);
     }
 }

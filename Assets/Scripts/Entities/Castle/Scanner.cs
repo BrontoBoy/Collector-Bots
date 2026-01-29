@@ -77,9 +77,9 @@ public class Scanner : MonoBehaviour
             {
                 if (_assignedGolds.Contains(gold) || _foundGolds.Contains(gold))
                     continue;
-    
-                _foundGolds.Add(gold);
-                SortGoldsByDistance();
+
+                AddGold(gold);
+                
                 GoldFound?.Invoke(gold);
             }
         }
@@ -102,7 +102,6 @@ public class Scanner : MonoBehaviour
     
     public void RemoveGold(Gold gold)
     {
-        _foundGolds.Remove(gold);
         _assignedGolds.Remove(gold);
     }
 }

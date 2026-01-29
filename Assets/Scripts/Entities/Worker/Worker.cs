@@ -35,12 +35,10 @@ public class Worker : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent(out Gold gold))
-        {
             if (Carrier.TargetGold != null && ReferenceEquals(_currentTarget, gold))
                 CollectGold(gold);
-        }
         
-        if (collision.gameObject.TryGetComponent(out TargetPoint targetPoint))
+        if (collision.gameObject.TryGetComponent<TargetPoint>(out _))
         {
             if (Carrier.TargetGold != null)
             {
@@ -78,7 +76,6 @@ public class Worker : MonoBehaviour
     
     private void CollectGold(Gold gold)
     {
-        gold.Collect();
         Carrier.AttachGold(gold);
             
         GoldCollected?.Invoke(this, gold);

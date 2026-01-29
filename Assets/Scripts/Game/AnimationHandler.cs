@@ -16,10 +16,4 @@ public class AnimationHandler : MonoBehaviour
         if (_animator != null)
             _animator.SetFloat(_speedParameter, isMoving ? 1f : 0f);
     }
-    
-    public void SetSpeed(float speed)
-    {
-        if (_animator != null)
-            _animator.SetFloat(_speedParameter, speed);
-    }
 }

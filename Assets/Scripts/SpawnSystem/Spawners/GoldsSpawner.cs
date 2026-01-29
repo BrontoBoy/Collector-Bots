@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(GoldsPool))]
 public class GoldsSpawner : Spawner<Gold>
 { 
-    [SerializeField] private float _spawnDelay = 2f;
+   [SerializeField] private float _delay = 2f;
     
     private Coroutine _spawnCoroutine;
     
@@ -26,9 +27,15 @@ public class GoldsSpawner : Spawner<Gold>
         }
     }
     
+    public void ReturnGold(Gold gold)
+    {
+        if (Pool != null && gold != null)
+            Pool.ReturnObject(gold);
+    }
+    
     private IEnumerator AutoSpawnRoutine()
     {
-        var wait = new WaitForSeconds(_spawnDelay);
+        var wait = new WaitForSeconds(_delay);
 
         while (enabled)
         {
@@ -41,12 +48,6 @@ public class GoldsSpawner : Spawner<Gold>
     {
         base.OnObjectSpawned(spawnedObject);
         GoldSpawned?.Invoke(spawnedObject);
-    }
-    
-    public void ReturnGold(Gold gold)
-    {
-        if (GameObjectsPool != null && gold != null)
-            GameObjectsPool.ReturnObject(gold);
     }
     
     private void OnDisable()

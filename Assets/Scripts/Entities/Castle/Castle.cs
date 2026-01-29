@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -11,12 +12,14 @@ using UnityEngine;
 public class Castle : MonoBehaviour, ITargetable
 {
     private CastleRenderer _castleRenderer;
-    private Storage _storage;
     private CastleUI _castleUI;
     private FlagHandler _flagHandler;
     
+    public event Action<Castle,Worker, Gold> GoldDelivered;
+    
     public Vector3 Position => transform.position;
     public Scanner Scanner { get; private set; }
+    public Storage Storage { get; private set; }
     public WorkerHandler WorkerHandler { get; private set; }
     public bool IsSelected { get; private set; }
     public bool HasFlag => _flagHandler != null && _flagHandler.HasFlag;
@@ -25,7 +28,7 @@ public class Castle : MonoBehaviour, ITargetable
     protected void Awake()
     {
         _castleRenderer = GetComponent<CastleRenderer>();
-        _storage = GetComponent<Storage>();
+        Storage = GetComponent<Storage>();
         _castleUI = GetComponent<CastleUI>();
         _flagHandler = GetComponent<FlagHandler>();
         
@@ -34,19 +37,26 @@ public class Castle : MonoBehaviour, ITargetable
         
         Scanner.StartScanning();
         WorkerHandler.Initialize();
+        
+        foreach (Worker worker in WorkerHandler.Workers)
+            SubscribeToWorkerEvents(worker);
+        
         UpdateCastleUI();
     }
     
     private void OnEnable()
     {
         Scanner.GoldFound += OnGoldFound;
-        _storage.GoldsChanged += OnStorageGoldsChanged;
+        Storage.GoldsChanged += OnStorageGoldsChanged;
     }
 
     private void OnDisable()
     {
         Scanner.GoldFound -= OnGoldFound;
-        _storage.GoldsChanged -= OnStorageGoldsChanged;
+        Storage.GoldsChanged -= OnStorageGoldsChanged;
+        
+        foreach (Worker worker in WorkerHandler.Workers)
+            UnsubscribeFromWorkerEvents(worker);
     }
     
     public void Select()
@@ -67,12 +77,12 @@ public class Castle : MonoBehaviour, ITargetable
     
     private void OnWorkerGoldCollected(Worker worker, Gold resource)
     {
-        worker.SetTarget(_storage.DeliveryPoint);
+        worker.SetTarget(Storage.DeliveryPoint);
     }
     
     private void UpdateCastleUI()
     {
-        _castleUI.UpdateGoldsDisplay(_storage.GoldsValue);
+        _castleUI.UpdateGoldsDisplay(Storage.GoldsValue);
     }
     
     private void OnStorageGoldsChanged(int newValue)
@@ -86,19 +96,18 @@ public class Castle : MonoBehaviour, ITargetable
         if (WorkerHandler.WorkersCount >= WorkerHandler.MaxWorkers)
             return;
         
-        if (_storage.GoldsValue >= WorkerHandler.WorkerCost)
+        if (Storage.GoldsValue >= WorkerHandler.WorkerCost)
             SpawnNewWorker(WorkerHandler.WorkerCost);
     }
     
     private void SpawnNewWorker(int cost)
     {
-        _storage.SpendGold(cost);
+        Storage.SpendGold(cost);
     
         if (WorkerHandler.WorkersSpawner != null)
         {
             Worker newWorker = WorkerHandler.WorkersSpawner.SpawnWorker();
             WorkerHandler.AddWorker(newWorker);
-            SubscribeToWorkerEvents(newWorker);
             newWorker.SetAsFree();
             AssignWorkerToGold();
         }
@@ -127,14 +136,7 @@ public class Castle : MonoBehaviour, ITargetable
     
     private void OnWorkerGoldDelivered(Worker worker, Gold gold)
     {
-        if (gold == null) 
-            return;
-        
-        _storage.AddGold();
-        UpdateCastleUI();
-        worker.SetAsFree();
-        UnsubscribeFromWorkerEvents(worker);
-        AssignWorkerToGold();
+        GoldDelivered?.Invoke(this, worker, gold);
     }
     
     private void SubscribeToWorkerEvents(Worker worker)

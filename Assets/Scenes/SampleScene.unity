@@ -673,7 +673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: _workerCost
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: '_workers.Array.data[0]'
@@ -1885,6 +1885,7 @@ GameObject:
   - component: {fileID: 625859676}
   - component: {fileID: 625859677}
   - component: {fileID: 625859678}
+  - component: {fileID: 625859679}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -1905,8 +1906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game
   _goldHandler: {fileID: 625859676}
-  _castles:
-  - {fileID: 2109912162}
+  _castlesHandler: {fileID: 625859679}
 --- !u!114 &625859674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1921,7 +1921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InputReader
   _castleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   _groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -2047,7 +2047,7 @@ MonoBehaviour:
   - {fileID: 2110172204}
   - {fileID: 325319056}
   GameObjectsPool: {fileID: 625859678}
-  _spawnDelay: 0.5
+  _delay: 2
 --- !u!114 &625859678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2061,8 +2061,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoldsPool
   Prefab: {fileID: -3386651264075550019, guid: 4d07f33428d0c20498e6aec02eeed599, type: 3}
-  PoolCapacity: 15
-  MaxPoolCapacity: 100
+  PoolCapacity: 3
+  MaxPoolCapacity: 5
+--- !u!114 &625859679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625859672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 491a80e6735d18b4ca83119f49e83f1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CastlesHandler
+  _castles: []
 --- !u!1001 &626641078
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6959,17 +6972,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8b9c066f6adc34386ad95b95464ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnPoint
---- !u!114 &2109912162 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-  m_PrefabInstance: {fileID: 228410337}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b159414d806ad3f4993ce8bb66bc2170, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Castle
 --- !u!1001 &2110172202
 PrefabInstance:
   m_ObjectHideFlags: 0
