@@ -16,29 +16,44 @@ public class Scanner : MonoBehaviour
     private List<Gold> _assignedGolds = new List<Gold>();
     private Coroutine _scanCoroutine;
     
-    public int FoundGoldsCount => _foundGolds.Count;
+    private void OnEnable()
+    {
+        StartScanning();
+    }
 
     private void OnDisable()
     {
-        if (_scanCoroutine == null)
-            StopScanning();
+        StopScanning();
     }
-
-    public void StartScanning()
+    
+    public void RemoveGold(Gold gold)
     {
-        if (_scanCoroutine == null)
-            _scanCoroutine = StartCoroutine(ScanRoutine());
+        _assignedGolds.Remove(gold);
     }
-
-    public void StopScanning()
+    
+    public Gold GetNearestGold()
     {
-        if (_scanCoroutine != null)
-        {
-            StopCoroutine(_scanCoroutine);
-            _scanCoroutine = null;
-        }
+        if (_foundGolds == null || _foundGolds.Count == 0) 
+            return null;
+        
+        Gold nearestGold = _foundGolds[0];
+        _assignedGolds.Add(nearestGold);
+        _foundGolds.RemoveAt(0);
+        
+        return nearestGold;
+    }
+    
+    private void StartScanning()
+    {
+        _scanCoroutine = StartCoroutine(ScanRoutine());
     }
 
+    private void StopScanning()
+    {
+        StopCoroutine(_scanCoroutine);
+        _scanCoroutine = null;
+    }
+    
     private IEnumerator ScanRoutine()
     {
         WaitForSeconds wait = new WaitForSeconds(_delay);
@@ -46,6 +61,7 @@ public class Scanner : MonoBehaviour
         while (enabled)
         {
             yield return wait;
+            
             FindGold();
         }
     }
@@ -58,10 +74,9 @@ public class Scanner : MonoBehaviour
             .OrderBy(gold => Vector3.Distance(castlePosition, gold.transform.position)).ToList();
     }
     
-    public void FindGold()
+    private void FindGold()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, _radius);
-
         int count = colliders.Length;
         
         for (int i = 0; i < count; i++)
@@ -85,23 +100,9 @@ public class Scanner : MonoBehaviour
         }
     }
     
-    public Gold GetNearestGold()
-    {
-        Gold nearestGold = _foundGolds[0];
-        _assignedGolds.Add(nearestGold);
-        _foundGolds.RemoveAt(0);
-        
-        return nearestGold;
-    }
-    
-    public void AddGold(Gold gold)
+    private void AddGold(Gold gold)
     {
         _foundGolds.Add(gold);
         SortGoldsByDistance(); 
-    }
-    
-    public void RemoveGold(Gold gold)
-    {
-        _assignedGolds.Remove(gold);
     }
 }

@@ -13,18 +13,6 @@ public class GoldHandler : MonoBehaviour
         GoldsSpawner = GetComponent<GoldsSpawner>();
     }
     
-    private void OnEnable()
-    {
-        if (GoldsSpawner != null)
-            GoldsSpawner.GoldSpawned += OnGoldSpawned;
-    }
-
-    private void OnDisable()
-    {
-        if (GoldsSpawner != null)
-            GoldsSpawner.GoldSpawned -= OnGoldSpawned;
-    }
-    
     public bool IsGoldInHandler(Gold gold)
     {
         return gold != null && _golds.Contains(gold);
@@ -50,10 +38,5 @@ public class GoldHandler : MonoBehaviour
     {
         if (gold != null && GoldsSpawner != null)
             GoldsSpawner.ReturnGold(gold);
-    }
-    
-    private void OnGoldSpawned(Gold gold)
-    {
-        AddGold(gold);
     }
 }

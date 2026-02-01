@@ -10,6 +10,7 @@ public class Worker : MonoBehaviour
     private Mover _mover; 
     private AnimationHandler _animationHandler;
     private ITargetable _currentTarget;
+    private bool _isCarrying;
     
     public event Action<Worker, Gold> GoldCollected;
     public event Action<Worker, Gold> GoldDelivered;
@@ -40,10 +41,13 @@ public class Worker : MonoBehaviour
         
         if (collision.gameObject.TryGetComponent<TargetPoint>(out _))
         {
+            if (_isCarrying)
+                return;
+            
             if (Carrier.TargetGold != null)
             {
+                _isCarrying = true;
                 DepositGold();
-                Carrier.SetTargetGold(null);
             }
         }
     }
@@ -56,22 +60,28 @@ public class Worker : MonoBehaviour
     
     public void SetAsFree()
     {
+        _isCarrying = false;
         _currentTarget = null;
         _mover.StopMove();
         _animationHandler.SetMoving(false);
     }
     
-    public void MoveToTarget(ITargetable target)
+    private void MoveToTarget(ITargetable target)
     {
         _mover.StartMove(target.Position);
         _animationHandler.SetMoving(true);
     }
     
-    public void DepositGold()
+    private void DepositGold()
     {
-        Carrier.DetachGold();
+        Gold gold = Carrier.TargetGold;
+
+        if (gold == null)
+            return;
         
-        GoldDelivered?.Invoke(this, Carrier.TargetGold);
+        Carrier.SetTargetGold(null);
+
+        GoldDelivered?.Invoke(this, gold);
     }
     
     private void CollectGold(Gold gold)

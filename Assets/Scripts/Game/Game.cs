@@ -13,20 +13,22 @@ public class Game : MonoBehaviour
     private void Awake()
     {
         _inputReader = GetComponent<InputReader>();
-    }
-    
-    private void OnEnable()
-    {
+        
         foreach (Castle castle in _castlesHandler.Castles)
-        {
+        {   
             if (castle != null && castle.Scanner != null)
-            {
+            {   
                 castle.Scanner.GoldFound += OnGoldFound;
                 castle.GoldDelivered += OnGoldDelivered;
             }
         }
     }
-
+    
+    private void Start()
+    {
+        StartGoldSpawning();
+    }
+    
     private void OnDisable()
     {
         foreach (Castle castle in _castlesHandler.Castles)
@@ -37,11 +39,6 @@ public class Game : MonoBehaviour
                 castle.GoldDelivered -= OnGoldDelivered;
             }
         }
-    }
-    
-    private void Start()
-    {
-        StartGoldSpawning();
     }
     
     private void StartGoldSpawning()
@@ -60,13 +57,14 @@ public class Game : MonoBehaviour
         
         if (nearestCastle == null)
             return;
-        
-        Worker freeWorker = nearestCastle.WorkerHandler.GetFreeWorker();
 
+        Gold nearestGold = nearestCastle.Scanner.GetNearestGold();
+        Worker freeWorker = nearestCastle.WorkerHandler.GetFreeWorker();
+        
         if (freeWorker == null)
             return;
-        
-        freeWorker.SetTarget(gold);
+
+        nearestCastle.AssignWorkerToGold(freeWorker, nearestGold);
     }
     
     private void OnGoldDelivered(Castle castle, Worker worker, Gold gold)
@@ -79,5 +77,6 @@ public class Game : MonoBehaviour
         _goldHandler.ReturnGoldToPool(gold); 
         castle.Storage.AddGold(); 
         worker.SetAsFree(); 
+        castle.WorkerHandler.ReturnWorker(worker);
     }
 }

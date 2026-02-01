@@ -16,7 +16,7 @@ public class WorkerHandler : MonoBehaviour
     public int WorkerCost => _workerCost;
     public List<Worker> Workers => _workers;
     public WorkersSpawner WorkersSpawner { get; private set; }
-
+    
     public void Initialize()
     {
         WorkersSpawner = GetComponent<WorkersSpawner>();
@@ -51,5 +51,16 @@ public class WorkerHandler : MonoBehaviour
             _workers.Add(worker);
             _freeWorkers.Enqueue(worker);
         }
+    }
+    
+    public void ReturnWorker(Worker worker)
+    {
+        if (worker == null)
+            return;
+
+        if (_freeWorkers.Contains(worker))
+            return;
+
+        _freeWorkers.Enqueue(worker);
     }
 }

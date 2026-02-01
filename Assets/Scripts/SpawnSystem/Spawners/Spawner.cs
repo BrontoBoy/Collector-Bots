@@ -34,6 +34,7 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
             return null;
             
         int randomIndex = Random.Range(0, SpawnPoints.Count);
+        
         return SpawnPoints[randomIndex];
     }
     

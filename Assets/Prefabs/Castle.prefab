@@ -534,6 +534,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b159414d806ad3f4993ce8bb66bc2170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Castle
+  _scanner: {fileID: -2933456717488768549}
+  _storage: {fileID: 4285559579816868935}
+  _workerHandler: {fileID: 4326686867069659144}
 --- !u!114 &-2933456717488768549
 MonoBehaviour:
   m_ObjectHideFlags: 0

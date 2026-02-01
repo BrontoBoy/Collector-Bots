@@ -17,8 +17,4 @@ public class Carrier : MonoBehaviour
         gold.transform.localPosition = Vector3.zero;
         gold.transform.localRotation = Quaternion.identity;
     }
-    
-    public void DetachGold()
-    {
-    }
 }

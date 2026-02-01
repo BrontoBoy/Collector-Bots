@@ -645,10 +645,6 @@ PrefabInstance:
       propertyPath: _radius
       value: 100
       objectReference: {fileID: 0}
-    - target: {fileID: -2933456717488768549, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 36520885302736437, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: m_Name
       value: Castle
@@ -696,15 +692,15 @@ PrefabInstance:
     - target: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: _scanner
       value: 
-      objectReference: {fileID: 145339358}
+      objectReference: {fileID: -2933456717488768549, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
     - target: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: _storage
       value: 
-      objectReference: {fileID: 421246663}
+      objectReference: {fileID: 4285559579816868935, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
     - target: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: _workerHandler
       value: 
-      objectReference: {fileID: 421246662}
+      objectReference: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
     - target: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: <Scanner>k__BackingField
       value: 
@@ -715,7 +711,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: _workerCost
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: '_workers.Array.data[0]'
@@ -1592,28 +1588,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!114 &421246662 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-  m_PrefabInstance: {fileID: 228410337}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddb2a0ec42544bf40a9a1e23c24732ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WorkerHandler
---- !u!114 &421246663 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4285559579816868935, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-  m_PrefabInstance: {fileID: 228410337}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5155699c9b53a3e4d86d75f17910bd20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Storage
 --- !u!1001 &452751068
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1950,7 +1924,6 @@ GameObject:
   - component: {fileID: 625859677}
   - component: {fileID: 625859678}
   - component: {fileID: 625859679}
-  - component: {fileID: 625859681}
   - component: {fileID: 625859680}
   m_Layer: 0
   m_Name: GameSystem
@@ -2113,7 +2086,7 @@ MonoBehaviour:
   - {fileID: 2110172204}
   - {fileID: 325319056}
   GameObjectsPool: {fileID: 625859678}
-  _delay: 0.5
+  _delay: 2
 --- !u!114 &625859678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2156,22 +2129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CastlesSpawner
   SpawnPoints: []
-  GameObjectsPool: {fileID: 625859681}
---- !u!114 &625859681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 625859672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a67277d398d0ea4aa6b4ed201a75256, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CastlesPool
-  Prefab: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-  PoolCapacity: 15
-  MaxPoolCapacity: 100
+  GameObjectsPool: {fileID: 0}
 --- !u!1001 &626641078
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
+[RequireComponent(typeof(CastlesSpawner))]
 public class CastlesHandler : MonoBehaviour
 {
     [SerializeField] private List<Castle> _castles = new List<Castle>();

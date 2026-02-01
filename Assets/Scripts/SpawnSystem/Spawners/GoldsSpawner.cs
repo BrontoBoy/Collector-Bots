@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(GoldsPool))]
 public class GoldsSpawner : Spawner<Gold>
@@ -10,21 +8,15 @@ public class GoldsSpawner : Spawner<Gold>
     
     private Coroutine _spawnCoroutine;
     
-    public event Action<Gold> GoldSpawned;
+    private void OnDisable()
+    {
+        StopSpawning();
+    }
     
     public void StartSpawning()
     {
         StopSpawning();
         _spawnCoroutine = StartCoroutine(AutoSpawnRoutine());
-    }
-    
-    public void StopSpawning()
-    {
-        if (_spawnCoroutine != null)
-        {
-            StopCoroutine(_spawnCoroutine);
-            _spawnCoroutine = null;
-        }
     }
     
     public void ReturnGold(Gold gold)
@@ -44,14 +36,12 @@ public class GoldsSpawner : Spawner<Gold>
         }
     }
     
-    protected override void OnObjectSpawned(Gold spawnedObject)
+    private void StopSpawning()
     {
-        base.OnObjectSpawned(spawnedObject);
-        GoldSpawned?.Invoke(spawnedObject);
-    }
-    
-    private void OnDisable()
-    {
-        StopSpawning();
+        if (_spawnCoroutine != null)
+        {
+            StopCoroutine(_spawnCoroutine);
+            _spawnCoroutine = null;
+        }
     }
 }
