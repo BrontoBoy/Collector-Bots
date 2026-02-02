@@ -9,10 +9,8 @@ public class InputReader : MonoBehaviour
     [SerializeField] private LayerMask _groundLayer;
     
     private Castle _selectedCastle;
-    
-    public event System.Action<Castle> CastleSelected;
-    public event System.Action<Castle> CastleDeselected;
-    public event System.Action<Vector3> GroundRightClicked;
+
+    public event System.Action<Castle, Vector3> GroundRightClickedWithCastle;
     
     private void Update()
     {
@@ -40,10 +38,13 @@ public class InputReader : MonoBehaviour
     
     private void HandleRightClick()
     {
+		if (_selectedCastle == null)
+            return;
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _groundLayer))
-            GroundRightClicked?.Invoke(hit.point);
+            GroundRightClickedWithCastle?.Invoke(_selectedCastle, hit.point); 
     }
     
     private void SelectCastle(Castle castle)
@@ -51,15 +52,12 @@ public class InputReader : MonoBehaviour
         DeselectCurrentCastle();
         _selectedCastle = castle;
         castle.Select();
-        CastleSelected?.Invoke(castle);
     }
     
     private void DeselectCurrentCastle()
     {
         if (_selectedCastle != null)
         {
-            CastleDeselected?.Invoke(_selectedCastle);
-            
             _selectedCastle.Deselect();
             _selectedCastle = null;
         }

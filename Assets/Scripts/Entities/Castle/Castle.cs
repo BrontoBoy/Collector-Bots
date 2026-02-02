@@ -70,6 +70,14 @@ public class Castle : MonoBehaviour, ITargetable
             _castleRenderer.OnDefault();
     }
     
+    public void PlaceFlag(Vector3 position)
+    {
+        if (_flagHandler != null)
+        {
+            _flagHandler.PlaceFlag(position);
+        }
+    }
+    
     public void AssignWorkerToGold(Worker worker, Gold gold)
     {
         if (worker == null || gold == null)

@@ -22,7 +22,7 @@ public class FlagHandler : MonoBehaviour
         
         if (_hasFlag == false)
         {
-            _flag = _flagsSpawner.SpawnAtPosition(position) as Flag;
+            _flag = _flagsSpawner.SpawnAtPosition(position);
             _hasFlag = true;
         }
         else
