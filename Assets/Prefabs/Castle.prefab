@@ -503,9 +503,6 @@ PrefabInstance:
       addedObject: {fileID: 8127162525989088129}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -1991604537855534230}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 5636140376528142106}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
       insertIndex: -1
@@ -582,6 +579,7 @@ MonoBehaviour:
   - {fileID: 0}
   _workerCost: 5
   _maxWorkers: 10
+  _workersSpawner: {fileID: 8127162525989088129}
 --- !u!114 &3040581926291313998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632,22 +630,7 @@ MonoBehaviour:
   - {fileID: 6648059405759311058}
   - {fileID: 2179702629848912449}
   - {fileID: 424706743543867384}
-  GameObjectsPool: {fileID: -1991604537855534230}
---- !u!114 &-1991604537855534230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 36520885302736437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77adf5cae7e74b34cbc74549468d5732, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UnitsPool
-  Prefab: {fileID: 3905642969416679853, guid: 0731ab68777ccc8498cd144d984d6bc4, type: 3}
-  PoolCapacity: 10
-  MaxPoolCapacity: 100
+  _workerPrefab: {fileID: 3905642969416679853, guid: 0731ab68777ccc8498cd144d984d6bc4, type: 3}
 --- !u!114 &5636140376528142106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -687,7 +670,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MarkersSpawner
   SpawnPoints: []
-  GameObjectsPool: {fileID: -7665329444627832900}
+  Pool: {fileID: -7665329444627832900}
+  _flagPrefab: {fileID: -8179781346430652744, guid: 952c1d297b444524c9c6460f6f3e82a7, type: 3}
 --- !u!114 &-7665329444627832900
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,1 +1,0 @@
-public class WorkersPool : GameObjectsPool<Worker> { }

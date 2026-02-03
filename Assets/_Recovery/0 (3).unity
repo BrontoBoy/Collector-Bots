@@ -733,21 +733,8 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 330585545}
-    - target: {fileID: 5437560472112568178, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: Pool
-      value: 
-      objectReference: {fileID: 1582900751}
-    - target: {fileID: 5437560472112568178, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: _flagPrefab
-      value: 
-      objectReference: {fileID: -8179781346430652744, guid: 952c1d297b444524c9c6460f6f3e82a7, type: 3}
-    - target: {fileID: 8127162525989088129, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-      propertyPath: GameObjectsPool
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
-    - {fileID: -1991604537855534230, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1963,6 +1950,7 @@ GameObject:
   - component: {fileID: 625859677}
   - component: {fileID: 625859678}
   - component: {fileID: 625859679}
+  - component: {fileID: 625859681}
   - component: {fileID: 625859680}
   m_Layer: 0
   m_Name: GameSystem
@@ -2124,8 +2112,7 @@ MonoBehaviour:
   - {fileID: 1131394038}
   - {fileID: 2110172204}
   - {fileID: 325319056}
-  Pool: {fileID: 625859678}
-  _goldPrefab: {fileID: -3386651264075550019, guid: 4d07f33428d0c20498e6aec02eeed599, type: 3}
+  GameObjectsPool: {fileID: 625859678}
   _delay: 0.5
 --- !u!114 &625859678
 MonoBehaviour:
@@ -2169,7 +2156,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CastlesSpawner
   SpawnPoints: []
-  _castlePrefab: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+  GameObjectsPool: {fileID: 625859681}
+--- !u!114 &625859681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625859672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a67277d398d0ea4aa6b4ed201a75256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CastlesPool
+  Prefab: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+  PoolCapacity: 15
+  MaxPoolCapacity: 100
 --- !u!1001 &626641078
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5314,17 +5316,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8b9c066f6adc34386ad95b95464ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnPoint
---- !u!114 &1582900751 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -7665329444627832900, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-  m_PrefabInstance: {fileID: 228410337}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8155f678a3f57145bf4e6b57d418a49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MarkersPool
 --- !u!114 &1592033149 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4335616498002046094, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}

@@ -1,21 +1,19 @@
-using Random = UnityEngine.Random;
+using UnityEngine;
 
 public class WorkersSpawner : Spawner<Worker>
 {
+    [SerializeField] private Worker _workerPrefab;
+
     public Worker SpawnWorker()
     {
-        if (Pool != null && SpawnPointsList != null && SpawnPointsList.Count > 0)
-        {
-            Worker worker = Pool.GetObject();
-            
-            if (worker != null)
-            {
-                int randomIndex = Random.Range(0, SpawnPointsList.Count);
-                worker.transform.position = SpawnPointsList[randomIndex].transform.position;
-                return worker;
-            }
-        }
-        
-        return null;
+        SpawnPoint spawnPoint = GetRandomSpawnPoint();
+        if (spawnPoint == null || _workerPrefab == null)
+            return null;
+
+        Worker worker = CreateInstance(_workerPrefab); // CHANGED
+        worker.transform.position = spawnPoint.transform.position;
+
+        OnObjectSpawned(worker);
+        return worker;
     }
 }

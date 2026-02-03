@@ -1,19 +1,17 @@
 using UnityEngine;
 
-public class FlagsSpawner : Spawner<Flag>
+public class FlagsSpawner : PoolSpawner<Flag> // CHANGED: теперь PoolSpawner
 {
+    [SerializeField] private Flag _flagPrefab; // CHANGED
+
     public Flag SpawnAtPosition(Vector3 position)
     {
-        if (Pool != null)
-        {
-            Flag flag = Pool.GetObject();
-            
-            if (flag != null)
-            {
-                flag.transform.position = position;
-                return flag;
-            }
-        }
-        return null;
+        if (_flagPrefab == null)
+            return null;
+
+        Flag flag = CreateInstance(_flagPrefab); // CHANGED: из пула
+        flag.transform.position = position;
+
+        return flag;
     }
 }

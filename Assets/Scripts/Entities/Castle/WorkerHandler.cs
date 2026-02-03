@@ -7,6 +7,7 @@ public class WorkerHandler : MonoBehaviour
     [SerializeField] private List<Worker> _workers = new List<Worker>();
     [SerializeField] private int _workerCost = 0;
     [SerializeField] private int _maxWorkers = 10;
+    [SerializeField] private WorkersSpawner _workersSpawner;
     
     private Queue<Worker> _freeWorkers = new Queue<Worker>();
     
@@ -15,12 +16,10 @@ public class WorkerHandler : MonoBehaviour
     public int MaxWorkers => _maxWorkers;
     public int WorkerCost => _workerCost;
     public List<Worker> Workers => _workers;
-    public WorkersSpawner WorkersSpawner { get; private set; }
+    public WorkersSpawner WorkersSpawner => _workersSpawner;
     
     public void Initialize()
     {
-        WorkersSpawner = GetComponent<WorkersSpawner>();
-        
         foreach (Worker worker in _workers)
         {
             if (worker != null)
