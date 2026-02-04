@@ -718,6 +718,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+      propertyPath: _workers.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: '_workers.Array.data[0]'
       value: 
       objectReference: {fileID: 1870816938}
@@ -2154,6 +2158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 491a80e6735d18b4ca83119f49e83f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CastlesHandler
+  _castlesSpawner: {fileID: 625859680}
   _castles:
   - {fileID: 145339359}
 --- !u!114 &625859680

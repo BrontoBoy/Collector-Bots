@@ -546,7 +546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5221f341e4919b45926435d1d961b69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Scanner
-  _radius: 25
+  _radius: 100
   _delay: 1
 --- !u!114 &4285559579816868935
 MonoBehaviour:
@@ -573,10 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddb2a0ec42544bf40a9a1e23c24732ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorkerHandler
-  _workers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  _workers: []
   _workerCost: 5
   _maxWorkers: 10
   _workersSpawner: {fileID: 8127162525989088129}

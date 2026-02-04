@@ -14,6 +14,7 @@ public class Worker : MonoBehaviour
     
     public event Action<Worker, Gold> GoldCollected;
     public event Action<Worker, Gold> GoldDelivered;
+    public event Action<Worker, ITargetable> FlagReached;
     
     public Carrier Carrier { get; private set; }
 
@@ -48,6 +49,15 @@ public class Worker : MonoBehaviour
             {
                 _isCarrying = true;
                 DepositGold();
+            }
+        }
+        
+        if (collision.gameObject.TryGetComponent(out Flag flag))
+        {
+            if (ReferenceEquals(_currentTarget, flag))
+            {
+                FlagReached?.Invoke(this, flag);
+                _currentTarget = null;
             }
         }
     }

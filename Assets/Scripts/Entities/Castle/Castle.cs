@@ -19,6 +19,7 @@ public class Castle : MonoBehaviour, ITargetable
     private FlagHandler _flagHandler;
     
     public event Action<Castle,Worker, Gold> GoldDelivered;
+    public event Action<Castle, Worker, Vector3> CastleCreationRequested;
     
     public Vector3 Position => transform.position;
     public Scanner Scanner => _scanner;
@@ -27,6 +28,10 @@ public class Castle : MonoBehaviour, ITargetable
     public bool IsSelected { get; private set; }
     public bool HasFlag => _flagHandler != null && _flagHandler.HasFlag;
     public Flag Flag => _flagHandler?.Flag;
+    
+    private State _state = State.Normal;
+    private int _castleCost = 5;
+    private Worker _builder;
     
     protected void Awake()
     {   
@@ -75,6 +80,7 @@ public class Castle : MonoBehaviour, ITargetable
         if (_flagHandler != null)
         {
             _flagHandler.PlaceFlag(position);
+            _state = State.StartBuilding;
         }
     }
     
@@ -92,6 +98,30 @@ public class Castle : MonoBehaviour, ITargetable
         worker.SetTarget(_storage.DeliveryPoint);
     }
     
+    private void OnWorkerReachedFlag(Worker worker, ITargetable target)
+    {
+        if (_flagHandler.HasFlag && target.Equals(_flagHandler.Flag))
+        {
+            _builder.FlagReached -= OnWorkerReachedFlag;
+
+            // сохраняем позицию флага
+            Vector3 flagPosition = _flagHandler.Flag.Position;
+
+            // ❗ Вместо прямого удаления флага И создания замка —
+            // мы сначала уведомляем внешний обработчик
+            CastleCreationRequested?.Invoke(this, worker, flagPosition);
+
+            // затем удаляем флаг
+            _flagHandler.RemoveFlag();
+
+            worker.SetAsFree();
+            _workerHandler.ReturnWorker(worker);
+
+            _builder = null;
+            _state = State.Normal;
+        }
+    }
+    
     private void UpdateCastleUI()
     {
         _castleUI.UpdateGoldsDisplay(_storage.GoldsValue);
@@ -100,7 +130,17 @@ public class Castle : MonoBehaviour, ITargetable
     private void OnStorageGoldsChanged(int newValue)
     {
         UpdateCastleUI();
-        TrySpawnWorker();
+        
+        switch (_state)
+        {
+            case State.Normal:
+                TrySpawnWorker();
+                break;
+
+            case State.StartBuilding:
+                TryCreateCastle();
+                break;
+        }
     }
 
     private void TrySpawnWorker()
@@ -110,6 +150,26 @@ public class Castle : MonoBehaviour, ITargetable
         
         if (_storage.GoldsValue >= _workerHandler.WorkerCost)
             SpawnNewWorker(_workerHandler.WorkerCost);
+    }
+    
+    private void TryCreateCastle()
+    {
+        if (_storage.GoldsValue < _castleCost)
+            return;
+
+        Worker freeWorker = _workerHandler.GetFreeWorker();
+        
+        if (freeWorker == null)
+            return;
+
+        _storage.SpendGold(_castleCost);
+
+        _builder = freeWorker;
+        _builder.FlagReached += OnWorkerReachedFlag;
+
+        _builder.SetTarget(_flagHandler.Flag);
+
+        _state = State.Normal;
     }
     
     private void SpawnNewWorker(int cost)
@@ -129,21 +189,29 @@ public class Castle : MonoBehaviour, ITargetable
         GoldDelivered?.Invoke(this, worker, gold);
     }
     
-    private void SubscribeToWorkerEvents(Worker worker)
+    public void SubscribeToWorkerEvents(Worker worker)
     {
         if (worker == null)
             return;
         
         worker.GoldCollected += OnWorkerGoldCollected;
         worker.GoldDelivered += OnWorkerGoldDelivered;
+        worker.FlagReached += OnWorkerReachedFlag;
     }
     
-    private void UnsubscribeFromWorkerEvents(Worker worker)
+    public void UnsubscribeFromWorkerEvents(Worker worker)
     {
         if (worker == null)
             return;
             
         worker.GoldCollected -= OnWorkerGoldCollected;
         worker.GoldDelivered -= OnWorkerGoldDelivered;
+        worker.FlagReached -= OnWorkerReachedFlag;
+    }
+    
+    private enum State
+    {
+        Normal,
+        StartBuilding
     }
 }
