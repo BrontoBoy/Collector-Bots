@@ -487,6 +487,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8367338876110859362, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}
   m_PrefabInstance: {fileID: 137541889}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &145339358 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -2933456717488768549, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+  m_PrefabInstance: {fileID: 228410337}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5221f341e4919b45926435d1d961b69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Scanner
+--- !u!114 &145339359 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+  m_PrefabInstance: {fileID: 228410337}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b159414d806ad3f4993ce8bb66bc2170, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Castle
 --- !u!1001 &149040943
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -674,19 +696,19 @@ PrefabInstance:
     - target: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: _scanner
       value: 
-      objectReference: {fileID: 1582900770}
+      objectReference: {fileID: 145339358}
     - target: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: _storage
       value: 
-      objectReference: {fileID: 1582900769}
+      objectReference: {fileID: 421246663}
     - target: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: _workerHandler
       value: 
-      objectReference: {fileID: 1582900768}
+      objectReference: {fileID: 421246662}
     - target: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: <Scanner>k__BackingField
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 145339358}
     - target: {fileID: 3479549302593467420, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: m_Radius
       value: 1
@@ -718,7 +740,7 @@ PrefabInstance:
     - target: {fileID: 5437560472112568178, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: Pool
       value: 
-      objectReference: {fileID: 1582900761}
+      objectReference: {fileID: 1582900751}
     - target: {fileID: 5437560472112568178, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: _flagPrefab
       value: 
@@ -1587,6 +1609,28 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &421246662 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+  m_PrefabInstance: {fileID: 228410337}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb2a0ec42544bf40a9a1e23c24732ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorkerHandler
+--- !u!114 &421246663 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4285559579816868935, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+  m_PrefabInstance: {fileID: 228410337}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5155699c9b53a3e4d86d75f17910bd20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Storage
 --- !u!1001 &452751068
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2116,7 +2160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CastlesHandler
   _castlesSpawner: {fileID: 625859680}
   _castles:
-  - {fileID: 1582900771}
+  - {fileID: 145339359}
 --- !u!114 &625859680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5275,7 +5319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8b9c066f6adc34386ad95b95464ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnPoint
---- !u!114 &1582900761 stripped
+--- !u!114 &1582900751 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -7665329444627832900, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
   m_PrefabInstance: {fileID: 228410337}
@@ -5286,50 +5330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8155f678a3f57145bf4e6b57d418a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MarkersPool
---- !u!114 &1582900768 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-  m_PrefabInstance: {fileID: 228410337}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddb2a0ec42544bf40a9a1e23c24732ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WorkerHandler
---- !u!114 &1582900769 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4285559579816868935, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-  m_PrefabInstance: {fileID: 228410337}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5155699c9b53a3e4d86d75f17910bd20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Storage
---- !u!114 &1582900770 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -2933456717488768549, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-  m_PrefabInstance: {fileID: 228410337}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5221f341e4919b45926435d1d961b69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Scanner
---- !u!114 &1582900771 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
-  m_PrefabInstance: {fileID: 228410337}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b159414d806ad3f4993ce8bb66bc2170, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Castle
 --- !u!114 &1592033149 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4335616498002046094, guid: 044eb5dbb7126b94fa5c157d88c74940, type: 3}

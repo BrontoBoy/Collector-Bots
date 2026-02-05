@@ -6,7 +6,7 @@ public class FlagHandler : MonoBehaviour
     private FlagsSpawner _flagsSpawner;
     private Flag _flag;
     private bool _hasFlag = false;
-
+    
     public bool HasFlag => _hasFlag;
     public Flag Flag => _flag;
 

@@ -17,6 +17,10 @@ public class Castle : MonoBehaviour, ITargetable
     private CastleRenderer _castleRenderer;
     private CastleUI _castleUI;
     private FlagHandler _flagHandler;
+    private State _state = State.Normal;
+    private int _castleCost = 5;
+    private Worker _builder;
+    private bool _isBuilderMoveToCreateNewCastle = false;
     
     public event Action<Castle,Worker, Gold> GoldDelivered;
     public event Action<Castle, Worker, Vector3> CastleCreationRequested;
@@ -25,16 +29,23 @@ public class Castle : MonoBehaviour, ITargetable
     public Scanner Scanner => _scanner;
     public Storage Storage => _storage;
     public WorkerHandler WorkerHandler => _workerHandler;
+    public FlagHandler FlagHandler => _flagHandler;
     public bool IsSelected { get; private set; }
     public bool HasFlag => _flagHandler != null && _flagHandler.HasFlag;
     public Flag Flag => _flagHandler?.Flag;
     
-    private State _state = State.Normal;
-    private int _castleCost = 5;
-    private Worker _builder;
     
     protected void Awake()
-    {   
+    {
+        if (_scanner == null)
+            _scanner  = GetComponent<Scanner>();
+        
+        if (_storage == null)
+            _storage  = GetComponent<Storage>();
+        
+        if (_scanner == null)
+            _workerHandler  = GetComponent<WorkerHandler>();
+        
         _castleRenderer = GetComponent<CastleRenderer>();
         _castleUI = GetComponent<CastleUI>();
         _flagHandler = GetComponent<FlagHandler>();
@@ -81,6 +92,11 @@ public class Castle : MonoBehaviour, ITargetable
         {
             _flagHandler.PlaceFlag(position);
             _state = State.StartBuilding;
+
+            if (_isBuilderMoveToCreateNewCastle == true)
+            {
+                _builder.SetTarget(_flagHandler.Flag);
+            }
         }
     }
     
@@ -117,6 +133,7 @@ public class Castle : MonoBehaviour, ITargetable
             worker.SetAsFree();
             _workerHandler.ReturnWorker(worker);
 
+            _isBuilderMoveToCreateNewCastle = false;
             _builder = null;
             _state = State.Normal;
         }
@@ -164,12 +181,11 @@ public class Castle : MonoBehaviour, ITargetable
 
         _storage.SpendGold(_castleCost);
 
+        _isBuilderMoveToCreateNewCastle = true;
         _builder = freeWorker;
         _builder.FlagReached += OnWorkerReachedFlag;
 
         _builder.SetTarget(_flagHandler.Flag);
-
-        _state = State.Normal;
     }
     
     private void SpawnNewWorker(int cost)
