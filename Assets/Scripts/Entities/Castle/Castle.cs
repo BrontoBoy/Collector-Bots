@@ -43,7 +43,7 @@ public class Castle : MonoBehaviour, ITargetable
         if (_storage == null)
             _storage  = GetComponent<Storage>();
         
-        if (_scanner == null)
+        if (_workerHandler == null)
             _workerHandler  = GetComponent<WorkerHandler>();
         
         _castleRenderer = GetComponent<CastleRenderer>();
@@ -119,15 +119,11 @@ public class Castle : MonoBehaviour, ITargetable
         if (_flagHandler.HasFlag && target.Equals(_flagHandler.Flag))
         {
             _builder.FlagReached -= OnWorkerReachedFlag;
-
-            // сохраняем позицию флага
+            
             Vector3 flagPosition = _flagHandler.Flag.Position;
-
-            // ❗ Вместо прямого удаления флага И создания замка —
-            // мы сначала уведомляем внешний обработчик
+            
             CastleCreationRequested?.Invoke(this, worker, flagPosition);
 
-            // затем удаляем флаг
             _flagHandler.RemoveFlag();
 
             worker.SetAsFree();
@@ -213,6 +209,7 @@ public class Castle : MonoBehaviour, ITargetable
         worker.GoldCollected += OnWorkerGoldCollected;
         worker.GoldDelivered += OnWorkerGoldDelivered;
         worker.FlagReached += OnWorkerReachedFlag;
+        worker.GoldMissed += OnWorkerGoldMissed;
     }
     
     public void UnsubscribeFromWorkerEvents(Worker worker)
@@ -223,6 +220,25 @@ public class Castle : MonoBehaviour, ITargetable
         worker.GoldCollected -= OnWorkerGoldCollected;
         worker.GoldDelivered -= OnWorkerGoldDelivered;
         worker.FlagReached -= OnWorkerReachedFlag;
+        worker.GoldMissed -= OnWorkerGoldMissed;
+    }
+    
+    private void OnWorkerGoldMissed(Worker worker)
+    {
+        if (worker == null) return;
+
+        Gold newGold = _scanner.GetNearestGold();  // Pop из своего _foundGolds
+        if (newGold != null)
+        {
+            Debug.Log("Castle: Assigning new gold to missed worker.");
+            AssignWorkerToGold(worker, newGold);
+        }
+        else
+        {
+            // Нет золота — free
+            worker.SetAsFree();
+            _workerHandler.ReturnWorker(worker);
+        }
     }
     
     private enum State

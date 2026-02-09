@@ -17,13 +17,12 @@ public class Game : MonoBehaviour
 		_inputReader.GroundRightClickedWithCastle += OnGroundRightClickedWithCastle;
 
         foreach (Castle castle in _castlesHandler.Castles)
-        {   
-            if (castle != null && castle.Scanner != null)
-            {   
-                castle.Scanner.GoldFound += OnGoldFound;
-                castle.GoldDelivered += OnGoldDelivered;
-            }
+        {
+            SubscribeToCastle(castle);
         }
+
+        // Подписка на новые замки
+        _castlesHandler.CastleCreated += SubscribeToCastle;
     }
     
     private void Start()
@@ -42,6 +41,20 @@ public class Game : MonoBehaviour
                 castle.Scanner.GoldFound -= OnGoldFound;
                 castle.GoldDelivered -= OnGoldDelivered;
             }
+        }
+        
+        _castlesHandler.CastleCreated -= SubscribeToCastle;
+    }
+    
+    public void SubscribeToCastle(Castle castle)
+    {
+        if (castle == null) 
+            return;
+        
+        if (castle.Scanner != null)
+        {
+            castle.Scanner.GoldFound += OnGoldFound;
+            castle.GoldDelivered += OnGoldDelivered;
         }
     }
     

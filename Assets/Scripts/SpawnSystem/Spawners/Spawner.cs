@@ -6,7 +6,7 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
 {
     [SerializeField] protected List<SpawnPoint> SpawnPoints; // ОСТАЁТСЯ
 
-    protected SpawnPoint GetRandomSpawnPoint()
+    public SpawnPoint GetRandomSpawnPoint()
     {
         if (SpawnPoints == null || SpawnPoints.Count == 0)
             return null;

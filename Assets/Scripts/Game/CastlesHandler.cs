@@ -1,12 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 [RequireComponent(typeof(CastlesSpawner))]
 public class CastlesHandler : MonoBehaviour
 {
     [SerializeField] private CastlesSpawner _castlesSpawner;
     [SerializeField] private List<Castle> _castles = new List<Castle>();
+    
+    public event Action<Castle> CastleCreated;
     
     public IReadOnlyList<Castle> Castles => _castles.AsReadOnly();
     
@@ -34,12 +37,10 @@ public class CastlesHandler : MonoBehaviour
     
     private void OnCastleCreationRequested(Castle sourceCastle, Worker worker, Vector3 position)
     {
-        // создаём новый замок
         Castle newCastle = CreateCastleAtPosition(position);
-
         if (newCastle != null)
         {
-            // переносим работника
+            CastleCreated?.Invoke(newCastle);           // ← НОВОЕ
             TransferWorkerToNewCastle(worker, sourceCastle, newCastle);
         }
     }
@@ -51,17 +52,20 @@ public class CastlesHandler : MonoBehaviour
 
         // Удаляем работника из старого замка
         oldCastle.WorkerHandler.Workers.Remove(worker);
-
-        // Снимаем старые события
         oldCastle.UnsubscribeFromWorkerEvents(worker);
-
-        // Сброс текущей цели, чтобы не было "зависших" TargetGold/TargetPoint
         worker.SetAsFree();
+
+        // ← НОВОЕ: Телепорт в random spawn point нового замка
+        if (newCastle.WorkerHandler.WorkersSpawner != null)
+        {
+            SpawnPoint spawnPoint = newCastle.WorkerHandler.WorkersSpawner.GetRandomSpawnPoint();
+            
+            if (spawnPoint != null)
+                worker.transform.position = spawnPoint.transform.position;
+        }
 
         // Добавляем работника в новый замок
         newCastle.WorkerHandler.AddWorker(worker);
-
-        // Подписываем события для нового замка
         newCastle.SubscribeToWorkerEvents(worker);
     }
 
@@ -103,4 +107,6 @@ public class CastlesHandler : MonoBehaviour
     
         return nearestCastle;
     }
+    
+    
 }
