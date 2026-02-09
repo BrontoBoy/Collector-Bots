@@ -22,7 +22,7 @@ public class Castle : MonoBehaviour, ITargetable
     private Worker _builder;
     private bool _isBuilderMoveToCreateNewCastle = false;
     
-    public event Action<Castle,Worker, Gold> GoldDelivered;
+    public event Action<Castle, Worker, Gold> GoldDelivered;
     public event Action<Castle, Worker, Vector3> CastleCreationRequested;
     
     public Vector3 Position => transform.position;
@@ -34,17 +34,16 @@ public class Castle : MonoBehaviour, ITargetable
     public bool HasFlag => _flagHandler != null && _flagHandler.HasFlag;
     public Flag Flag => _flagHandler?.Flag;
     
-    
     protected void Awake()
     {
         if (_scanner == null)
-            _scanner  = GetComponent<Scanner>();
+            _scanner = GetComponent<Scanner>();
         
         if (_storage == null)
-            _storage  = GetComponent<Storage>();
+            _storage = GetComponent<Storage>();
         
         if (_workerHandler == null)
-            _workerHandler  = GetComponent<WorkerHandler>();
+            _workerHandler = GetComponent<WorkerHandler>();
         
         _castleRenderer = GetComponent<CastleRenderer>();
         _castleUI = GetComponent<CastleUI>();
@@ -88,26 +87,43 @@ public class Castle : MonoBehaviour, ITargetable
     
     public void PlaceFlag(Vector3 position)
     {
-        if (_flagHandler != null)
+        if (_flagHandler == null)
+            return;
+            
+        // ПРОВЕРКА: достаточно ли рабочих?
+        if (_workerHandler.WorkersCount < 2)
         {
-            _flagHandler.PlaceFlag(position);
-            _state = State.StartBuilding;
-
-            if (_isBuilderMoveToCreateNewCastle == true)
-                _builder.SetTarget(_flagHandler.Flag);
+            // Выводим сообщение в консоль
+            Debug.Log($"Рабочих недостаточно");
+            return; // Не ставим флаг, ничего не делаем
         }
+        
+        // Если достаточно рабочих - ставим флаг
+        _flagHandler.PlaceFlag(position);
+        _state = State.StartBuilding;
+
+        if (_isBuilderMoveToCreateNewCastle == true)
+            _builder.SetTarget(_flagHandler.Flag);
     }
     
-    public void AssignWorkerToGold(Worker worker, Gold gold)
+    // Метод для назначения рабочего на золото
+    public bool AssignWorkerToGold(Gold gold)
     {
-        if (worker == null || gold == null)
-            return;
-
-        worker.Carrier.SetTargetGold(gold);
-        worker.SetTarget(gold);
+        if (gold == null)
+            return false;
+            
+        Worker freeWorker = _workerHandler.GetFreeWorker();
+        
+        if (freeWorker == null)
+            return false;
+            
+        freeWorker.Carrier.SetTargetGold(gold);
+        freeWorker.SetTarget(gold);
+        
+        return true;
     }
 
-	public void SubscribeToWorkerEvents(Worker worker)
+    public void SubscribeToWorkerEvents(Worker worker)
     {
         if (worker == null)
             return;
@@ -127,7 +143,7 @@ public class Castle : MonoBehaviour, ITargetable
         worker.FlagReached -= OnWorkerReachedFlag;
     }
     
-	private void TrySpawnWorker()
+    private void TrySpawnWorker()
     {
         if (_workerHandler.WorkersCount >= _workerHandler.MaxWorkers)
             return;
@@ -136,7 +152,7 @@ public class Castle : MonoBehaviour, ITargetable
             SpawnNewWorker(_workerHandler.WorkerCost);
     }
 
-	private void SpawnNewWorker(int cost)
+    private void SpawnNewWorker(int cost)
     {
         _storage.SpendGold(cost);
     
@@ -167,7 +183,7 @@ public class Castle : MonoBehaviour, ITargetable
         _builder.SetTarget(_flagHandler.Flag);
     }
 
-	private void UpdateCastleUI()
+    private void UpdateCastleUI()
     {
         _castleUI.UpdateGoldsDisplay(_storage.GoldsValue);
     }
@@ -221,4 +237,4 @@ public class Castle : MonoBehaviour, ITargetable
         Normal,
         StartBuilding
     }
-}
+} 

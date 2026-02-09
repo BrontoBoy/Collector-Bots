@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 [RequireComponent(typeof(CastlesSpawner))]
 public class CastlesHandler : MonoBehaviour
@@ -9,7 +8,7 @@ public class CastlesHandler : MonoBehaviour
     [SerializeField] private CastlesSpawner _castlesSpawner;
     [SerializeField] private List<Castle> _castles = new List<Castle>();
     
-    public event Action<Castle> CastleCreated;
+    public event System.Action<Castle> CastleCreated;
     
     public IReadOnlyList<Castle> Castles => _castles.AsReadOnly();
     
@@ -27,7 +26,10 @@ public class CastlesHandler : MonoBehaviour
         Castle newCastle = _castlesSpawner.SpawnCastle(position);
         
         if (newCastle != null)
+        {
             _castles.Add(newCastle);
+            SubscribeToCastle(newCastle);
+        }
         
         return newCastle;
     }
@@ -49,6 +51,7 @@ public class CastlesHandler : MonoBehaviour
             return null;
         }
         
+        // Ищем замок с доступными рабочими, ближайший к золоту
         nearestCastle = _castles
             .Where(castle => castle != null && castle.WorkerHandler != null && castle.WorkerHandler.FreeWorkersCount > 0)
             .OrderBy(castle => Vector3.Distance(goldPosition, castle.transform.position))

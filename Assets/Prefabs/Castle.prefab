@@ -532,6 +532,7 @@ MonoBehaviour:
   _scanner: {fileID: -2933456717488768549}
   _storage: {fileID: 4285559579816868935}
   _workerHandler: {fileID: 4326686867069659144}
+  _castleCost: 5
 --- !u!114 &-2933456717488768549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -572,7 +573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorkerHandler
   _workers: []
-  _workerCost: 5
+  _workerCost: 3
   _maxWorkers: 10
   _workersSpawner: {fileID: 8127162525989088129}
 --- !u!114 &3040581926291313998
