@@ -2086,7 +2086,7 @@ MonoBehaviour:
   - {fileID: 325319056}
   Pool: {fileID: 625859678}
   _goldPrefab: {fileID: -3386651264075550019, guid: 4d07f33428d0c20498e6aec02eeed599, type: 3}
-  _delay: 0.5
+  _delay: 0.1
 --- !u!114 &625859678
 MonoBehaviour:
   m_ObjectHideFlags: 0

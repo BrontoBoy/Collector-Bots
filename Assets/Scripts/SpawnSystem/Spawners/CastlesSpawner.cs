@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CastlesSpawner : Spawner<Castle> // OK: без пула
+public class CastlesSpawner : Spawner<Castle>
 {
     [SerializeField] private Castle _castlePrefab;
 
@@ -9,10 +9,10 @@ public class CastlesSpawner : Spawner<Castle> // OK: без пула
         if (_castlePrefab == null)
             return null;
 
-        Castle castle = CreateInstance(_castlePrefab); // CHANGED (Instantiate)
+        Castle castle = CreateInstance(_castlePrefab);
         castle.transform.position = position;
-
         OnObjectSpawned(castle);
+        
         return castle;
     }
 }

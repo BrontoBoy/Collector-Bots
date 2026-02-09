@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class GoldsSpawner : PoolSpawner<Gold> // CHANGED
+public class GoldsSpawner : PoolSpawner<Gold>
 {
-    [SerializeField] private Gold _goldPrefab; // CHANGED
+    [SerializeField] private Gold _goldPrefab;
     [SerializeField] private float _delay = 2f;
 
     private Coroutine _spawnCoroutine;
@@ -42,10 +42,11 @@ public class GoldsSpawner : PoolSpawner<Gold> // CHANGED
     private void SpawnGold()
     {
         SpawnPoint spawnPoint = GetRandomSpawnPoint();
+        
         if (spawnPoint == null || _goldPrefab == null)
             return;
 
-        Gold gold = CreateInstance(_goldPrefab); // CHANGED (из пула)
+        Gold gold = CreateInstance(_goldPrefab);
         gold.transform.position = spawnPoint.transform.position;
     }
 }

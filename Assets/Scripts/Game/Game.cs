@@ -20,8 +20,7 @@ public class Game : MonoBehaviour
         {
             SubscribeToCastle(castle);
         }
-
-        // Подписка на новые замки
+        
         _castlesHandler.CastleCreated += SubscribeToCastle;
     }
     
@@ -58,18 +57,18 @@ public class Game : MonoBehaviour
         }
     }
     
+    private void StartGoldSpawning()
+    {
+        if (_goldHandler.GoldsSpawner != null)
+            _goldHandler.GoldsSpawner.StartSpawning();
+    }
+    
     private void OnGroundRightClickedWithCastle(Castle castle, Vector3 position)
     {
         if (castle == null)
             return;
 
         castle.PlaceFlag(position);
-    }
-
-    private void StartGoldSpawning()
-    {
-        if (_goldHandler.GoldsSpawner != null)
-            _goldHandler.GoldsSpawner.StartSpawning();
     }
     
     private void OnGoldFound(Gold gold)

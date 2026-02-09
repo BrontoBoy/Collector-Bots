@@ -12,7 +12,6 @@ public class Worker : MonoBehaviour
     private ITargetable _currentTarget;
     private bool _isCarrying;
     
-    public event Action<Worker> GoldMissed;
     public event Action<Worker, Gold> GoldCollected;
     public event Action<Worker, Gold> GoldDelivered;
     public event Action<Worker, ITargetable> FlagReached;
@@ -29,13 +28,8 @@ public class Worker : MonoBehaviour
     private void FixedUpdate()
     {
         bool isMoving = _mover != null && _mover.IsMoving;
-                _animationHandler.SetMoving(isMoving);
-                
-        if (isMoving == false && _currentTarget != null && _currentTarget is Gold && Carrier.TargetGold == null)
-        {
-            GoldMissed?.Invoke(this);  // ← Fire event (Castle handle)
-            _currentTarget = null;     // Сброс, чтобы не loop
-        }
+        
+        _animationHandler.SetMoving(isMoving);
     }
     
     private void OnCollisionEnter(Collision collision)
@@ -101,7 +95,6 @@ public class Worker : MonoBehaviour
     private void CollectGold(Gold gold)
     {
         gold.GetComponent<Collider>().enabled = false;
-        
         Carrier.AttachGold(gold);
             
         GoldCollected?.Invoke(this, gold);

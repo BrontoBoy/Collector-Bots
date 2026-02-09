@@ -37,6 +37,6 @@ public class GoldHandler : MonoBehaviour
     public void ReturnGoldToPool(Gold gold)
     {
         if (gold != null && GoldsSpawner != null)
-            GoldsSpawner.ReturnToPool(gold); // CHANGED
+            GoldsSpawner.ReturnToPool(gold);
     }
 }

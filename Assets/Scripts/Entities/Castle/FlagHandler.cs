@@ -4,11 +4,9 @@ using UnityEngine;
 public class FlagHandler : MonoBehaviour
 {
     private FlagsSpawner _flagsSpawner;
-    private Flag _flag;
-    private bool _hasFlag = false;
     
-    public bool HasFlag => _hasFlag;
-    public Flag Flag => _flag;
+    public bool HasFlag { get; private set; }
+    public Flag Flag { get; private set; }
 
     private void Awake()
     {
@@ -20,24 +18,24 @@ public class FlagHandler : MonoBehaviour
         if (_flagsSpawner == null)
             return;
 
-        if (_hasFlag == false)
+        if (HasFlag == false)
         {
-            _flag = _flagsSpawner.SpawnAtPosition(position);
-            _hasFlag = true;
+            Flag = _flagsSpawner.SpawnAtPosition(position);
+            HasFlag = true;
         }
-        else if (_flag != null)
+        else if (Flag != null)
         {
-            _flag.transform.position = position;
+            Flag.transform.position = position;
         }
     }
 
     public void RemoveFlag()
     {
-        if (_hasFlag && _flag != null)
+        if (HasFlag && Flag != null)
         {
-            _flagsSpawner.ReturnToPool(_flag); // CHANGED
-            _flag = null;
-            _hasFlag = false;
+            _flagsSpawner.ReturnToPool(Flag);
+            Flag = null;
+            HasFlag = false;
         }
     }
 }

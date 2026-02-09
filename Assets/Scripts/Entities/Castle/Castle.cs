@@ -13,12 +13,12 @@ public class Castle : MonoBehaviour, ITargetable
     [SerializeField] private Scanner _scanner;
     [SerializeField] private Storage _storage;
     [SerializeField] private WorkerHandler _workerHandler;
-    
+    [SerializeField] private int _castleCost = 5;
+
     private CastleRenderer _castleRenderer;
     private CastleUI _castleUI;
     private FlagHandler _flagHandler;
     private State _state = State.Normal;
-    private int _castleCost = 5;
     private Worker _builder;
     private bool _isBuilderMoveToCreateNewCastle = false;
     
@@ -94,9 +94,7 @@ public class Castle : MonoBehaviour, ITargetable
             _state = State.StartBuilding;
 
             if (_isBuilderMoveToCreateNewCastle == true)
-            {
                 _builder.SetTarget(_flagHandler.Flag);
-            }
         }
     }
     
@@ -108,61 +106,46 @@ public class Castle : MonoBehaviour, ITargetable
         worker.Carrier.SetTargetGold(gold);
         worker.SetTarget(gold);
     }
-    
-    private void OnWorkerGoldCollected(Worker worker, Gold resource)
-    {
-        worker.SetTarget(_storage.DeliveryPoint);
-    }
-    
-    private void OnWorkerReachedFlag(Worker worker, ITargetable target)
-    {
-        if (_flagHandler.HasFlag && target.Equals(_flagHandler.Flag))
-        {
-            _builder.FlagReached -= OnWorkerReachedFlag;
-            
-            Vector3 flagPosition = _flagHandler.Flag.Position;
-            
-            CastleCreationRequested?.Invoke(this, worker, flagPosition);
 
-            _flagHandler.RemoveFlag();
-
-            worker.SetAsFree();
-            _workerHandler.ReturnWorker(worker);
-
-            _isBuilderMoveToCreateNewCastle = false;
-            _builder = null;
-            _state = State.Normal;
-        }
-    }
-    
-    private void UpdateCastleUI()
+	public void SubscribeToWorkerEvents(Worker worker)
     {
-        _castleUI.UpdateGoldsDisplay(_storage.GoldsValue);
-    }
-    
-    private void OnStorageGoldsChanged(int newValue)
-    {
-        UpdateCastleUI();
+        if (worker == null)
+            return;
         
-        switch (_state)
-        {
-            case State.Normal:
-                TrySpawnWorker();
-                break;
-
-            case State.StartBuilding:
-                TryCreateCastle();
-                break;
-        }
+        worker.GoldCollected += OnWorkerGoldCollected;
+        worker.GoldDelivered += OnWorkerGoldDelivered;
+        worker.FlagReached += OnWorkerReachedFlag;
     }
-
-    private void TrySpawnWorker()
+    
+    public void UnsubscribeFromWorkerEvents(Worker worker)
+    {
+        if (worker == null)
+            return;
+            
+        worker.GoldCollected -= OnWorkerGoldCollected;
+        worker.GoldDelivered -= OnWorkerGoldDelivered;
+        worker.FlagReached -= OnWorkerReachedFlag;
+    }
+    
+	private void TrySpawnWorker()
     {
         if (_workerHandler.WorkersCount >= _workerHandler.MaxWorkers)
             return;
         
         if (_storage.GoldsValue >= _workerHandler.WorkerCost)
             SpawnNewWorker(_workerHandler.WorkerCost);
+    }
+
+	private void SpawnNewWorker(int cost)
+    {
+        _storage.SpendGold(cost);
+    
+        if (_workerHandler.WorkersSpawner != null)
+        {
+            Worker newWorker = _workerHandler.WorkersSpawner.SpawnWorker();
+            _workerHandler.AddWorker(newWorker);
+            SubscribeToWorkerEvents(newWorker);
+        }
     }
     
     private void TryCreateCastle()
@@ -183,62 +166,54 @@ public class Castle : MonoBehaviour, ITargetable
 
         _builder.SetTarget(_flagHandler.Flag);
     }
-    
-    private void SpawnNewWorker(int cost)
+
+	private void UpdateCastleUI()
     {
-        _storage.SpendGold(cost);
+        _castleUI.UpdateGoldsDisplay(_storage.GoldsValue);
+    }
+
+    private void OnWorkerGoldCollected(Worker worker, Gold resource)
+    {
+        worker.SetTarget(_storage.DeliveryPoint);
+    }
     
-        if (_workerHandler.WorkersSpawner != null)
+    private void OnWorkerReachedFlag(Worker worker, ITargetable target)
+    {
+        if (_flagHandler.HasFlag && target.Equals(_flagHandler.Flag))
         {
-            Worker newWorker = _workerHandler.WorkersSpawner.SpawnWorker();
-            _workerHandler.AddWorker(newWorker);
-            SubscribeToWorkerEvents(newWorker);
+            _builder.FlagReached -= OnWorkerReachedFlag;
+            Vector3 flagPosition = _flagHandler.Flag.Position;
+            
+            CastleCreationRequested?.Invoke(this, worker, flagPosition);
+
+            _flagHandler.RemoveFlag();
+            worker.SetAsFree();
+            _workerHandler.ReturnWorker(worker);
+            _isBuilderMoveToCreateNewCastle = false;
+            _builder = null;
+            _state = State.Normal;
         }
     }
     
+    private void OnStorageGoldsChanged(int newValue)
+    {
+        UpdateCastleUI();
+        
+        switch (_state)
+        {
+            case State.Normal:
+                TrySpawnWorker();
+                break;
+
+            case State.StartBuilding:
+                TryCreateCastle();
+                break;
+        }
+    }
+
     private void OnWorkerGoldDelivered(Worker worker, Gold gold)
     {
         GoldDelivered?.Invoke(this, worker, gold);
-    }
-    
-    public void SubscribeToWorkerEvents(Worker worker)
-    {
-        if (worker == null)
-            return;
-        
-        worker.GoldCollected += OnWorkerGoldCollected;
-        worker.GoldDelivered += OnWorkerGoldDelivered;
-        worker.FlagReached += OnWorkerReachedFlag;
-        worker.GoldMissed += OnWorkerGoldMissed;
-    }
-    
-    public void UnsubscribeFromWorkerEvents(Worker worker)
-    {
-        if (worker == null)
-            return;
-            
-        worker.GoldCollected -= OnWorkerGoldCollected;
-        worker.GoldDelivered -= OnWorkerGoldDelivered;
-        worker.FlagReached -= OnWorkerReachedFlag;
-        worker.GoldMissed -= OnWorkerGoldMissed;
-    }
-    
-    private void OnWorkerGoldMissed(Worker worker)
-    {
-        if (worker == null) return;
-
-        Gold newGold = _scanner.GetNearestGold();  // Pop из своего _foundGolds
-        if (newGold != null)
-        {
-            Debug.Log("Castle: Assigning new gold to missed worker.");
-            AssignWorkerToGold(worker, newGold);
-        }
-        else
-        {
-            // Нет золота — free
-            worker.SetAsFree();
-            _workerHandler.ReturnWorker(worker);
-        }
     }
     
     private enum State

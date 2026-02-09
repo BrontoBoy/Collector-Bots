@@ -61,7 +61,7 @@ public class Scanner : MonoBehaviour
         while (enabled)
         {
             yield return wait;
-            
+
             FindGold();
         }
     }

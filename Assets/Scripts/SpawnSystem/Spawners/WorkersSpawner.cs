@@ -7,10 +7,11 @@ public class WorkersSpawner : Spawner<Worker>
     public Worker SpawnWorker()
     {
         SpawnPoint spawnPoint = GetRandomSpawnPoint();
+        
         if (spawnPoint == null || _workerPrefab == null)
             return null;
 
-        Worker worker = CreateInstance(_workerPrefab); // CHANGED
+        Worker worker = CreateInstance(_workerPrefab);
         worker.transform.position = spawnPoint.transform.position;
 
         OnObjectSpawned(worker);
