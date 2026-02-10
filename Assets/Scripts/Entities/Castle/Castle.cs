@@ -10,6 +10,8 @@ using UnityEngine;
 [RequireComponent(typeof(FlagHandler))]
 public class Castle : MonoBehaviour, ITargetable
 {
+    private const int MinWorkersValueForBuilding = 2;
+    
     [SerializeField] private Scanner _scanner;
     [SerializeField] private Storage _storage;
     [SerializeField] private WorkerHandler _workerHandler;
@@ -18,9 +20,9 @@ public class Castle : MonoBehaviour, ITargetable
     private CastleRenderer _castleRenderer;
     private CastleUI _castleUI;
     private FlagHandler _flagHandler;
-    private State _state = State.Normal;
     private Worker _builder;
     private bool _isBuilderMoveToCreateNewCastle = false;
+    private State _state = State.Normal;
     
     public event Action<Castle, Worker, Gold> GoldDelivered;
     public event Action<Castle, Worker, Vector3> CastleCreationRequested;
@@ -29,10 +31,7 @@ public class Castle : MonoBehaviour, ITargetable
     public Scanner Scanner => _scanner;
     public Storage Storage => _storage;
     public WorkerHandler WorkerHandler => _workerHandler;
-    public FlagHandler FlagHandler => _flagHandler;
     public bool IsSelected { get; private set; }
-    public bool HasFlag => _flagHandler != null && _flagHandler.HasFlag;
-    public Flag Flag => _flagHandler?.Flag;
     
     protected void Awake()
     {
@@ -89,24 +88,21 @@ public class Castle : MonoBehaviour, ITargetable
     {
         if (_flagHandler == null)
             return;
-            
-        // ПРОВЕРКА: достаточно ли рабочих?
-        if (_workerHandler.WorkersCount < 2)
+        
+        if (_workerHandler.WorkersCount < MinWorkersValueForBuilding)
         {
-            // Выводим сообщение в консоль
-            Debug.Log($"Рабочих недостаточно");
-            return; // Не ставим флаг, ничего не делаем
+            Debug.Log("Рабочих недостаточно");
+            
+            return;
         }
         
-        // Если достаточно рабочих - ставим флаг
         _flagHandler.PlaceFlag(position);
         _state = State.StartBuilding;
 
-        if (_isBuilderMoveToCreateNewCastle == true)
+        if (_isBuilderMoveToCreateNewCastle)
             _builder.SetTarget(_flagHandler.Flag);
     }
     
-    // Метод для назначения рабочего на золото
     public bool AssignWorkerToGold(Gold gold)
     {
         if (gold == null)
@@ -198,6 +194,7 @@ public class Castle : MonoBehaviour, ITargetable
         if (_flagHandler.HasFlag && target.Equals(_flagHandler.Flag))
         {
             _builder.FlagReached -= OnWorkerReachedFlag;
+            
             Vector3 flagPosition = _flagHandler.Flag.Position;
             
             CastleCreationRequested?.Invoke(this, worker, flagPosition);

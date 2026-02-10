@@ -17,21 +17,11 @@ public class CastlesHandler : MonoBehaviour
         foreach (Castle castle in _castles)
             SubscribeToCastle(castle);
     }
-    
-    public Castle CreateCastleAtPosition(Vector3 position)
-    {
-        if (_castlesSpawner == null)
-            return null;
 
-        Castle newCastle = _castlesSpawner.SpawnCastle(position);
-        
-        if (newCastle != null)
-        {
-            _castles.Add(newCastle);
-            SubscribeToCastle(newCastle);
-        }
-        
-        return newCastle;
+    private void OnDestroy()
+    {
+        foreach (Castle castle in _castles)
+            UnsubscribeFromCastle(castle);
     }
     
     public Castle GetNearestCastle(Vector3 goldPosition)
@@ -51,7 +41,6 @@ public class CastlesHandler : MonoBehaviour
             return null;
         }
         
-        // Ищем замок с доступными рабочими, ближайший к золоту
         nearestCastle = _castles
             .Where(castle => castle != null && castle.WorkerHandler != null && castle.WorkerHandler.FreeWorkersCount > 0)
             .OrderBy(castle => Vector3.Distance(goldPosition, castle.transform.position))
@@ -60,7 +49,44 @@ public class CastlesHandler : MonoBehaviour
         return nearestCastle;
     }
     
-    public void SubscribeToCastle(Castle castle)
+    private Castle CreateCastleAtPosition(Vector3 position)
+    {
+        if (_castlesSpawner == null)
+            return null;
+
+        Castle newCastle = _castlesSpawner.SpawnCastle(position);
+        
+        if (newCastle != null)
+        {
+            _castles.Add(newCastle);
+            SubscribeToCastle(newCastle);
+        }
+        
+        return newCastle;
+    }
+    
+    private void TransferWorkerToNewCastle(Worker worker, Castle oldCastle, Castle newCastle)
+    {
+        if (worker == null || newCastle == null)
+            return;
+        
+        oldCastle.WorkerHandler.RemoveWorker(worker);
+        oldCastle.UnsubscribeFromWorkerEvents(worker);
+        worker.SetAsFree();
+        
+        if (newCastle.WorkerHandler.WorkersSpawner != null)
+        {
+            SpawnPoint spawnPoint = newCastle.WorkerHandler.WorkersSpawner.GetRandomSpawnPoint();
+            
+            if (spawnPoint != null)
+                worker.transform.position = spawnPoint.transform.position;
+        }
+        
+        newCastle.WorkerHandler.AddWorker(worker);
+        newCastle.SubscribeToWorkerEvents(worker);
+    }
+    
+    private void SubscribeToCastle(Castle castle)
     {
         if (castle == null)
             return;
@@ -68,7 +94,7 @@ public class CastlesHandler : MonoBehaviour
         castle.CastleCreationRequested += OnCastleCreationRequested;
     }
 
-    public void UnsubscribeFromCastle(Castle castle)
+    private void UnsubscribeFromCastle(Castle castle)
     {
         if (castle == null)
             return;
@@ -85,26 +111,5 @@ public class CastlesHandler : MonoBehaviour
             CastleCreated?.Invoke(newCastle);
             TransferWorkerToNewCastle(worker, sourceCastle, newCastle);
         }
-    }
-    
-    private void TransferWorkerToNewCastle(Worker worker, Castle oldCastle, Castle newCastle)
-    {
-        if (worker == null || newCastle == null)
-            return;
-        
-        oldCastle.WorkerHandler.Workers.Remove(worker);
-        oldCastle.UnsubscribeFromWorkerEvents(worker);
-        worker.SetAsFree();
-        
-        if (newCastle.WorkerHandler.WorkersSpawner != null)
-        {
-            SpawnPoint spawnPoint = newCastle.WorkerHandler.WorkersSpawner.GetRandomSpawnPoint();
-            
-            if (spawnPoint != null)
-                worker.transform.position = spawnPoint.transform.position;
-        }
-        
-        newCastle.WorkerHandler.AddWorker(worker);
-        newCastle.SubscribeToWorkerEvents(worker);
     }
 }

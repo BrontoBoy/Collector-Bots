@@ -15,18 +15,14 @@ public class Game : MonoBehaviour
         _inputReader = GetComponent<InputReader>();
         
         _inputReader.GroundRightClickedWithCastle += OnGroundRightClickedWithCastle;
-
-        // Подписываемся на сканеры всех замков
+        
         foreach (Castle castle in _castlesHandler.Castles)
         {
             SubscribeToCastleScanner(castle);
             SubscribeToCastleDelivery(castle);
         }
         
-        // Подписываемся на новые замки
         _castlesHandler.CastleCreated += OnNewCastleCreated;
-        
-        // Подписываемся на событие готовности золота к сбору
         _goldHandler.GoldReadyForCollection += OnGoldReadyForCollection;
     }
     
@@ -52,33 +48,25 @@ public class Game : MonoBehaviour
     private void SubscribeToCastleScanner(Castle castle)
     {
         if (castle?.Scanner != null)
-        {
             castle.Scanner.GoldFound += OnScannerFoundGold;
-        }
     }
     
     private void UnsubscribeFromCastleScanner(Castle castle)
     {
         if (castle?.Scanner != null)
-        {
             castle.Scanner.GoldFound -= OnScannerFoundGold;
-        }
     }
     
     private void SubscribeToCastleDelivery(Castle castle)
     {
         if (castle != null)
-        {
             castle.GoldDelivered += OnGoldDelivered;
-        }
     }
     
     private void UnsubscribeFromCastleDelivery(Castle castle)
     {
         if (castle != null)
-        {
             castle.GoldDelivered -= OnGoldDelivered;
-        }
     }
     
     private void OnNewCastleCreated(Castle newCastle)
@@ -101,29 +89,19 @@ public class Game : MonoBehaviour
         castle.PlaceFlag(position);
     }
     
-    // Сканер нашел золото - передаем в хендлер для проверки
     private void OnScannerFoundGold(Gold gold)
     {
         _goldHandler.TryAddGold(gold);
     }
     
-    // Золото готово к сбору (проверено на дубли)
     private void OnGoldReadyForCollection(Gold gold)
     {
-        // Находим ближайший замок с доступными рабочими
         Castle nearestCastle = _castlesHandler.GetNearestCastle(gold.transform.position);
         
         if (nearestCastle == null)
             return;
         
-        // Замок сам решает, какого рабочего назначить
         bool assigned = nearestCastle.AssignWorkerToGold(gold);
-        
-        if (!assigned)
-        {
-            // Если не смогли назначить рабочего (нет свободных),
-            // золото остается в хендлере и может быть назначено позже
-        }
     }
     
     private void OnGoldDelivered(Castle castle, Worker worker, Gold gold)
@@ -131,10 +109,7 @@ public class Game : MonoBehaviour
         if(castle == null || worker == null || gold == null)
             return;
         
-        // Удаляем золото из хендлера
         _goldHandler.RemoveGold(gold);
-        
-        // Обновляем состояние замка и рабочего
         castle.Storage.AddGold(); 
         worker.SetAsFree(); 
         castle.WorkerHandler.ReturnWorker(worker);

@@ -8,7 +8,6 @@ public class GoldHandler : MonoBehaviour
     
     private List<Gold> _golds = new List<Gold>();
     
-    // Событие когда золото готово к сбору (без дублей)
     public event System.Action<Gold> GoldReadyForCollection;
 
     public GoldsSpawner GoldsSpawner => _goldsSpawner;
@@ -26,6 +25,7 @@ public class GoldHandler : MonoBehaviour
 
         _golds.Add(gold);
         GoldReadyForCollection?.Invoke(gold);
+        
         return true;
     }
 
@@ -43,6 +43,4 @@ public class GoldHandler : MonoBehaviour
         if (gold != null && _goldsSpawner != null)
             _goldsSpawner.ReturnToPool(gold);
     }
-
-    public bool IsGoldInHandler(Gold gold) => gold != null && _golds.Contains(gold);
 }

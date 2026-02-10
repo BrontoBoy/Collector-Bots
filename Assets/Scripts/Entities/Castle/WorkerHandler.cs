@@ -15,7 +15,7 @@ public class WorkerHandler : MonoBehaviour
     public int FreeWorkersCount => _freeWorkers.Count;
     public int MaxWorkers => _maxWorkers;
     public int WorkerCost => _workerCost;
-    public List<Worker> Workers => _workers;
+    public IReadOnlyList<Worker> Workers => _workers.AsReadOnly();
     public WorkersSpawner WorkersSpawner => _workersSpawner;
     
     public void Initialize()
@@ -61,5 +61,13 @@ public class WorkerHandler : MonoBehaviour
             return;
 
         _freeWorkers.Enqueue(worker);
+    }
+    
+    public void RemoveWorker(Worker worker)
+    {
+        if (worker == null || !_workers.Contains(worker))
+            return;
+
+        _workers.Remove(worker);
     }
 }

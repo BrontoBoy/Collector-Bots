@@ -19,7 +19,7 @@ public class GoldsSpawner : PoolSpawner<Gold>
         _spawnCoroutine = StartCoroutine(AutoSpawnRoutine());
     }
 
-    public void StopSpawning()
+    private void StopSpawning()
     {
         if (_spawnCoroutine != null)
         {

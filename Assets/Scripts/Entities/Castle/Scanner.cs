@@ -21,20 +21,6 @@ public class Scanner : MonoBehaviour
         StopScanning();
     }
     
-    // Метод для ручного удаления золота из отслеживания
-    public void RemoveGold(Gold gold)
-    {
-        // В новой архитектуре сканер только находит,
-        // но оставляем метод для совместимости
-    }
-    
-    public Gold GetNearestGold()
-    {
-        // В новой архитектуре не используется,
-        // оставляем для совместимости
-        return null;
-    }
-    
     private void StartScanning()
     {
         _scanCoroutine = StartCoroutine(ScanRoutine());
@@ -56,6 +42,7 @@ public class Scanner : MonoBehaviour
         while (enabled)
         {
             yield return wait;
+            
             FindGold();
         }
     }
@@ -70,9 +57,7 @@ public class Scanner : MonoBehaviour
                 continue;
 
             if (collider.TryGetComponent(out Gold gold))
-            {
                 GoldFound?.Invoke(gold);
-            }
         }
     }
 }
