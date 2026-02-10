@@ -32,7 +32,9 @@ public class Mover : MonoBehaviour
     {
         _isMoving = true;
         
-        while (Vector3.Distance(transform.position, target) > _stopDistance)
+        float stopDistanceSqr = _stopDistance * _stopDistance;
+        
+        while ((transform.position - target).sqrMagnitude > stopDistanceSqr)
         {
             Vector3 direction = (target - transform.position).normalized;
             transform.position += direction * _speed * Time.deltaTime;

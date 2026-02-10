@@ -20,6 +20,4 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
     {
         return Instantiate(prefab);
     }
-
-    protected virtual void OnObjectSpawned(T spawnedObject) { }
 }

@@ -14,7 +14,7 @@ public class Game : MonoBehaviour
     {
         _inputReader = GetComponent<InputReader>();
         
-        _inputReader.GroundRightClickedWithCastle += OnGroundRightClickedWithCastle;
+        _inputReader.CommandReceived += OnCommandReceived;
         
         foreach (Castle castle in _castlesHandler.Castles)
         {
@@ -28,7 +28,7 @@ public class Game : MonoBehaviour
     
     private void OnDisable()
     {
-        _inputReader.GroundRightClickedWithCastle -= OnGroundRightClickedWithCastle;
+        _inputReader.CommandReceived -= OnCommandReceived;
 
         foreach (Castle castle in _castlesHandler.Castles)
         {
@@ -81,7 +81,7 @@ public class Game : MonoBehaviour
             _goldHandler.GoldsSpawner.StartSpawning();
     }
     
-    private void OnGroundRightClickedWithCastle(Castle castle, Vector3 position)
+    private void OnCommandReceived(Castle castle, Vector3 position)
     {
         if (castle == null)
             return;

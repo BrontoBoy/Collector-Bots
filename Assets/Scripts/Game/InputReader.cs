@@ -2,33 +2,33 @@ using UnityEngine;
 
 public class InputReader : MonoBehaviour
 {
-    private const int LeftMouseButtonIndex = 0;
-    private const int RightMouseButtonIndex = 1;
+    private const int SelectActionButtonIndex = 0;
+    private const int CommandActionButtonIndex = 1;
     
     [SerializeField] private LayerMask _castleLayer;
     [SerializeField] private LayerMask _groundLayer;
     
     private Castle _selectedCastle;
 
-    public event System.Action<Castle, Vector3> GroundRightClickedWithCastle;
+    public event System.Action<Castle, Vector3> CommandReceived;
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(LeftMouseButtonIndex))
-            HandleLeftClick();
+        if (Input.GetMouseButtonDown(SelectActionButtonIndex))
+            OnSelectAction();
         
-        if (Input.GetMouseButtonDown(RightMouseButtonIndex))
-            HandleRightClick();
+        if (Input.GetMouseButtonDown(CommandActionButtonIndex))
+            OnCommandAction();
     }
     
-    private void HandleLeftClick()
+    private void OnSelectAction()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _castleLayer))
         {
-            if (hit.collider.TryGetComponent<Castle>(out Castle castle))
-                SelectCastle(castle);
+            if (hit.collider.TryGetComponent(out Castle castle))
+            	SelectCastle(castle);
         }
         else
         {
@@ -36,7 +36,7 @@ public class InputReader : MonoBehaviour
         }
     }
     
-    private void HandleRightClick()
+    private void OnCommandAction()
     {
 		if (_selectedCastle == null)
             return;
@@ -44,7 +44,7 @@ public class InputReader : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _groundLayer))
-            GroundRightClickedWithCastle?.Invoke(_selectedCastle, hit.point); 
+            CommandReceived?.Invoke(_selectedCastle, hit.point); 
     }
     
     private void SelectCastle(Castle castle)

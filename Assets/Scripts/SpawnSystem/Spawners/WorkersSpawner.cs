@@ -13,8 +13,7 @@ public class WorkersSpawner : Spawner<Worker>
 
         Worker worker = CreateInstance(_workerPrefab);
         worker.transform.position = spawnPoint.transform.position;
-
-        OnObjectSpawned(worker);
+        
         return worker;
     }
 }

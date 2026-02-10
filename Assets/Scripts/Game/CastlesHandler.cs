@@ -43,7 +43,7 @@ public class CastlesHandler : MonoBehaviour
         
         nearestCastle = _castles
             .Where(castle => castle != null && castle.WorkerHandler != null && castle.WorkerHandler.FreeWorkersCount > 0)
-            .OrderBy(castle => Vector3.Distance(goldPosition, castle.transform.position))
+            .OrderBy(castle => (goldPosition - castle.transform.position).sqrMagnitude)
             .FirstOrDefault();
     
         return nearestCastle;

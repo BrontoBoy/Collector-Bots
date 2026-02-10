@@ -11,7 +11,6 @@ public class CastlesSpawner : Spawner<Castle>
 
         Castle castle = CreateInstance(_castlePrefab);
         castle.transform.position = position;
-        OnObjectSpawned(castle);
         
         return castle;
     }
