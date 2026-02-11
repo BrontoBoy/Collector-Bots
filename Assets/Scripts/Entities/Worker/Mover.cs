@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using UnityEngine;
 
 public class Mover : MonoBehaviour
@@ -8,6 +9,8 @@ public class Mover : MonoBehaviour
 
     private Coroutine _moveCoroutine;
     private bool _isMoving = false;
+    
+    public event Action TargetReached;
     
     public bool IsMoving => _isMoving;
 
@@ -47,5 +50,7 @@ public class Mover : MonoBehaviour
         
         _isMoving = false;
         _moveCoroutine = null;
+        
+        TargetReached?.Invoke();
     }
 }

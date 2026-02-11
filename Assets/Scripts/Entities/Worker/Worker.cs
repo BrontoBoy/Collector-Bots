@@ -10,7 +10,7 @@ public class Worker : MonoBehaviour
     private Mover _mover; 
     private AnimationHandler _animationHandler;
     private ITargetable _currentTarget;
-    private bool _isCarrying;
+    private bool _isSubscribedToMover = false;
     
     public event Action<Worker, Gold> GoldCollected;
     public event Action<Worker, Gold> GoldDelivered;
@@ -32,46 +32,30 @@ public class Worker : MonoBehaviour
         _animationHandler.SetMoving(isMoving);
     }
     
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.TryGetComponent(out Gold gold))
-            if (Carrier.TargetGold != null && ReferenceEquals(_currentTarget, gold))
-                CollectGold(gold);
-        
-        if (collision.gameObject.TryGetComponent<TargetPoint>(out _))
-        {
-            if (_isCarrying)
-                return;
-            
-            if (Carrier.TargetGold != null)
-            {
-                _isCarrying = true;
-                DepositGold();
-            }
-        }
-        
-        if (collision.gameObject.TryGetComponent(out Flag flag))
-        {
-            if (ReferenceEquals(_currentTarget, flag))
-            {
-                FlagReached?.Invoke(this, flag);
-                _currentTarget = null;
-            }
-        }
-    }
-    
     public void SetTarget(ITargetable target)
     {
         _currentTarget = target;
+        
+        if (_isSubscribedToMover)
+            _mover.TargetReached -= OnMoveCompleted;
+            
+        _mover.TargetReached += OnMoveCompleted;
+        _isSubscribedToMover = true;
+        
         MoveToTarget(target);
     }
     
     public void SetAsFree()
     {
-        _isCarrying = false;
         _currentTarget = null;
         _mover.StopMove();
         _animationHandler.SetMoving(false);
+        
+        if (_isSubscribedToMover)
+        {
+            _mover.TargetReached -= OnMoveCompleted;
+            _isSubscribedToMover = false;
+        }
     }
     
     private void MoveToTarget(ITargetable target)
@@ -96,9 +80,30 @@ public class Worker : MonoBehaviour
     {
         gold.GetComponent<Collider>().enabled = false;
         Carrier.AttachGold(gold);
-            
+        _currentTarget = null;  
+        
         GoldCollected?.Invoke(this, gold);
-            
-        _currentTarget = null;
+    }
+    
+    private void OnMoveCompleted()
+    {
+        if (_isSubscribedToMover)
+        {
+            _mover.TargetReached -= OnMoveCompleted;
+            _isSubscribedToMover = false;
+        }
+        
+        if (_currentTarget is Gold gold)
+        {
+            CollectGold(gold);
+        }
+        else if (_currentTarget is TargetPoint && Carrier.TargetGold != null)
+        {
+            DepositGold();
+        }
+        else if (_currentTarget is Flag flag)
+        {
+            FlagReached?.Invoke(this, flag);
+        }
     }
 }

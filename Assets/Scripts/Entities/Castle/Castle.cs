@@ -19,7 +19,7 @@ public class Castle : MonoBehaviour, ITargetable
     private CastleRenderer _castleRenderer;
     private FlagHandler _flagHandler;
     private Worker _builder;
-    private bool _isBuilderMoveToCreateNewCastle = false;
+    private bool _isBuildCostPaid;
     private State _state = State.Normal;
     
     public event Action<Castle, Worker, Gold> GoldDelivered;
@@ -94,7 +94,7 @@ public class Castle : MonoBehaviour, ITargetable
         _flagHandler.PlaceFlag(position);
         _state = State.StartBuilding;
 
-        if (_isBuilderMoveToCreateNewCastle)
+        if (_isBuildCostPaid)
             _builder.SetTarget(_flagHandler.Flag);
     }
     
@@ -157,6 +157,9 @@ public class Castle : MonoBehaviour, ITargetable
     
     private void TryCreateCastle()
     {
+        if (_isBuildCostPaid)
+            return;
+            
         if (_storage.GoldsValue < _castleCost)
             return;
 
@@ -165,9 +168,8 @@ public class Castle : MonoBehaviour, ITargetable
         if (freeWorker == null)
             return;
 
+		_isBuildCostPaid = true;
         _storage.SpendGold(_castleCost);
-
-        _isBuilderMoveToCreateNewCastle = true;
         _builder = freeWorker;
         _builder.FlagReached += OnWorkerReachedFlag;
 
@@ -192,7 +194,7 @@ public class Castle : MonoBehaviour, ITargetable
             _flagHandler.RemoveFlag();
             worker.SetAsFree();
             _workerHandler.ReturnWorker(worker);
-            _isBuilderMoveToCreateNewCastle = false;
+            _isBuildCostPaid = false;
             _builder = null;
             _state = State.Normal;
         }

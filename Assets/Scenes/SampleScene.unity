@@ -1267,6 +1267,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3479549302593467420, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4326686867069659144, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: _workerCost
       value: 3
@@ -1302,6 +1306,10 @@ PrefabInstance:
     - target: {fileID: 8127162525989088129, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
       propertyPath: GameObjectsPool
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8659101077423409887, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
@@ -3840,7 +3848,7 @@ MonoBehaviour:
   - {fileID: 569068864}
   Pool: {fileID: 625859678}
   _goldPrefab: {fileID: -3386651264075550019, guid: 4d07f33428d0c20498e6aec02eeed599, type: 3}
-  _delay: 0.4
+  _delay: 0.25
 --- !u!114 &625859678
 MonoBehaviour:
   m_ObjectHideFlags: 0
