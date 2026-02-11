@@ -1,65 +1,49 @@
 using UnityEngine;
+using System;
 
 public class InputReader : MonoBehaviour
 {
     private const int SelectActionButtonIndex = 0;
     private const int CommandActionButtonIndex = 1;
-    
+
     [SerializeField] private LayerMask _castleLayer;
     [SerializeField] private LayerMask _groundLayer;
-    
-    private Castle _selectedCastle;
 
-    public event System.Action<Castle, Vector3> CommandReceived;
-    
+    public event Action<Castle> CastleSelected;
+    public event Action<Vector3> GroundSelected;
+    public event Action DeselectRequested;
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(SelectActionButtonIndex))
-            OnSelectAction();
-        
+            HandleSelectAction();
+
         if (Input.GetMouseButtonDown(CommandActionButtonIndex))
-            OnCommandAction();
+            HandleCommandAction();
     }
-    
-    private void OnSelectAction()
+
+    private void HandleSelectAction()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
+
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _castleLayer))
         {
             if (hit.collider.TryGetComponent(out Castle castle))
-            	SelectCastle(castle);
-        }
-        else
-        {
-            DeselectCurrentCastle();
-        }
-    }
-    
-    private void OnCommandAction()
-    {
-		if (_selectedCastle == null)
-            return;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            {
+                CastleSelected?.Invoke(castle);
                 
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _groundLayer))
-            CommandReceived?.Invoke(_selectedCastle, hit.point); 
-    }
-    
-    private void SelectCastle(Castle castle)
-    {
-        DeselectCurrentCastle();
-        _selectedCastle = castle;
-        castle.Select();
-    }
-    
-    private void DeselectCurrentCastle()
-    {
-        if (_selectedCastle != null)
-        {
-            _selectedCastle.Deselect();
-            _selectedCastle = null;
+                return;
+            }
         }
+
+        DeselectRequested?.Invoke();
+    }
+
+    private void HandleCommandAction()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _groundLayer))
+            GroundSelected?.Invoke(hit.point);
     }
 }

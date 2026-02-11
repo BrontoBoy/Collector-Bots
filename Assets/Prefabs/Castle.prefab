@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 85080226533864621}
+  - component: {fileID: 3786706503206161616}
   m_Layer: 7
   m_Name: CastleUI
   m_TagString: Untagged
@@ -32,6 +33,20 @@ Transform:
   - {fileID: 6180160730411836288}
   m_Father: {fileID: 849613669953858703}
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
+--- !u!114 &3786706503206161616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274736407764158323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bd3144d72fac504fa4626ec364d6256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CastleUI
+  _resourcesText: {fileID: 1471428107438141648}
+  _storage: {fileID: 4285559579816868935}
 --- !u!1 &2096280680296907773
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,9 +507,6 @@ PrefabInstance:
       addedObject: {fileID: 4326686867069659144}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3040581926291313998}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7161867849411361}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
       insertIndex: -1
@@ -576,19 +588,6 @@ MonoBehaviour:
   _workerCost: 3
   _maxWorkers: 10
   _workersSpawner: {fileID: 8127162525989088129}
---- !u!114 &3040581926291313998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 36520885302736437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bd3144d72fac504fa4626ec364d6256, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CastleUI
-  _resourcesText: {fileID: 1471428107438141648}
 --- !u!65 &7161867849411361
 BoxCollider:
   m_ObjectHideFlags: 0

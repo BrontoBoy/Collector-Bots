@@ -6,7 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(Scanner))]
 [RequireComponent(typeof(Storage))]
 [RequireComponent(typeof(WorkerHandler))]
-[RequireComponent(typeof(CastleUI))]
 [RequireComponent(typeof(FlagHandler))]
 public class Castle : MonoBehaviour, ITargetable
 {
@@ -18,7 +17,6 @@ public class Castle : MonoBehaviour, ITargetable
     [SerializeField] private int _castleCost = 5;
 
     private CastleRenderer _castleRenderer;
-    private CastleUI _castleUI;
     private FlagHandler _flagHandler;
     private Worker _builder;
     private bool _isBuilderMoveToCreateNewCastle = false;
@@ -45,14 +43,11 @@ public class Castle : MonoBehaviour, ITargetable
             _workerHandler = GetComponent<WorkerHandler>();
         
         _castleRenderer = GetComponent<CastleRenderer>();
-        _castleUI = GetComponent<CastleUI>();
         _flagHandler = GetComponent<FlagHandler>();
         _workerHandler.Initialize();
         
         foreach (Worker worker in _workerHandler.Workers)
             SubscribeToWorkerEvents(worker);
-        
-        UpdateCastleUI();
     }
     
     private void OnEnable()
@@ -178,12 +173,7 @@ public class Castle : MonoBehaviour, ITargetable
 
         _builder.SetTarget(_flagHandler.Flag);
     }
-
-    private void UpdateCastleUI()
-    {
-        _castleUI.UpdateGoldsDisplay(_storage.GoldsValue);
-    }
-
+    
     private void OnWorkerGoldCollected(Worker worker, Gold resource)
     {
         worker.SetTarget(_storage.DeliveryPoint);
@@ -210,8 +200,6 @@ public class Castle : MonoBehaviour, ITargetable
     
     private void OnStorageGoldsChanged(int newValue)
     {
-        UpdateCastleUI();
-        
         switch (_state)
         {
             case State.Normal:
