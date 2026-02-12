@@ -80,11 +80,6 @@ public class Game : MonoBehaviour
    
     private void OnGoldReadyForCollection(Gold gold)
     {
-        Gold freeGold = _goldHandler.GetFreeGold();
-        
-        if (freeGold == null)
-            return;
-        
         Castle nearestCastle = _castlesHandler.GetNearestCastle(gold.transform.position);
        
         if (nearestCastle == null)
@@ -92,10 +87,8 @@ public class Game : MonoBehaviour
        
         bool assigned = nearestCastle.AssignWorkerToGold(gold);
         
-        if (assigned == false)
-            return;
-        
-        nearestCastle.AssignWorkerToGold(freeGold);
+        if (assigned)
+            _goldHandler.MarkAsAssigned(gold);
     }
    
     private void OnGoldDelivered(Castle castle, Worker worker, Gold gold)
@@ -104,8 +97,27 @@ public class Game : MonoBehaviour
             return;
        
         _goldHandler.RemoveGold(gold);
-        castle.Storage.AddGold();
         worker.SetAsFree();
         castle.WorkerHandler.ReturnWorker(worker);
+        castle.Storage.AddGold();
+        ProcessPendingGold();
+    }
+    
+    private void ProcessPendingGold()
+    {
+        Gold freeGold = _goldHandler.GetFreeGold();
+        
+        if (freeGold == null)
+            return;
+            
+        Castle nearestCastle = _castlesHandler.GetNearestCastle(freeGold.transform.position);
+        
+        if (nearestCastle == null)
+            return;
+            
+        bool assigned = nearestCastle.AssignWorkerToGold(freeGold);
+        
+        if (assigned)
+            _goldHandler.MarkAsAssigned(freeGold);
     }
 }

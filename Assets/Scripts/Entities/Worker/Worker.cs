@@ -78,6 +78,14 @@ public class Worker : MonoBehaviour
     
     private void CollectGold(Gold gold)
     {
+        Collider goldCollider = gold.GetComponent<Collider>();
+        
+        if (goldCollider != null && goldCollider.enabled == false)
+        {
+            SetAsFree();
+            return;
+        }
+        
         gold.GetComponent<Collider>().enabled = false;
         Carrier.AttachGold(gold);
         _currentTarget = null;  
