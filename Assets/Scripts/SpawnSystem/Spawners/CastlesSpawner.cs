@@ -1,17 +1,26 @@
+using System;
 using UnityEngine;
 
-public class CastlesSpawner : Spawner<Castle>
+public class CastlesSpawner : MonoBehaviour
 {
-    [SerializeField] private Castle _castlePrefab;
+    [SerializeField] private CastleFactory _castleFactory;
 
+    public event Action<Castle> CastleSpawned;
+    
     public Castle SpawnCastle(Vector3 position)
     {
-        if (_castlePrefab == null)
+        if (_castleFactory == null)
             return null;
 
-        Castle castle = CreateInstance(_castlePrefab);
-        castle.transform.position = position;
+        Castle newCastle = _castleFactory.Create(position);
+        CastleSpawned?.Invoke(newCastle);
         
-        return castle;
+        return newCastle;
+    }
+    
+    public void OnCastleSpawnRequested(Vector3 position, Action<Castle> Spawned)
+    {
+        Castle newCastle = SpawnCastle(position);
+        Spawned?.Invoke(newCastle);
     }
 }

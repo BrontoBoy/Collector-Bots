@@ -7,6 +7,8 @@ public class Game : MonoBehaviour
 {
     [SerializeField] private GoldHandler _goldHandler;
     [SerializeField] private CastlesHandler _castlesHandler;
+    [SerializeField] private GoldsSpawner _goldsSpawner;
+    [SerializeField] private CastlesSpawner _castlesSpawner;
    
     private void Awake()
     {
@@ -18,6 +20,12 @@ public class Game : MonoBehaviour
        
         _castlesHandler.CastleCreated += OnNewCastleCreated;
         _goldHandler.GoldReadyForCollection += OnGoldReadyForCollection;
+        
+        if (_goldsSpawner != null)
+            _goldHandler.GoldCollected += _goldsSpawner.OnGoldCollected;
+
+        if (_castlesSpawner != null)
+            _castlesHandler.CastleSpawnRequested += _castlesSpawner.OnCastleSpawnRequested;
     }
    
     private void OnDisable()
@@ -30,13 +38,14 @@ public class Game : MonoBehaviour
        
         _castlesHandler.CastleCreated -= OnNewCastleCreated;
         _goldHandler.GoldReadyForCollection -= OnGoldReadyForCollection;
+        
+        if (_goldsSpawner != null)
+            _goldHandler.GoldCollected -= _goldsSpawner.OnGoldCollected;
+
+        if (_castlesSpawner != null)
+            _castlesHandler.CastleSpawnRequested -= _castlesSpawner.OnCastleSpawnRequested;
     }
-   
-    private void Start()
-    {
-        StartGoldSpawning();
-    }
-   
+    
     private void SubscribeToCastleScanner(Castle castle)
     {
         if (castle?.Scanner != null)
@@ -67,12 +76,6 @@ public class Game : MonoBehaviour
         SubscribeToCastleDelivery(newCastle);
     }
    
-    private void StartGoldSpawning()
-    {
-        if (_goldHandler.GoldsSpawner != null)
-            _goldHandler.GoldsSpawner.StartSpawning();
-    }
-   
     private void OnScannerFoundGold(Gold gold)
     {
         _goldHandler.TryAddGold(gold);
@@ -98,7 +101,7 @@ public class Game : MonoBehaviour
        
         _goldHandler.RemoveGold(gold);
         worker.SetAsFree();
-        castle.WorkerHandler.ReturnWorker(worker);
+        castle.WorkerHandler.ReleaseWorker(worker);
         castle.Storage.AddGold();
         ProcessPendingGold();
     }

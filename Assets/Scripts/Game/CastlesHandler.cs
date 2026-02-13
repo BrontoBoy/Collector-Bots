@@ -1,14 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
-[RequireComponent(typeof(CastlesSpawner))]
 public class CastlesHandler : MonoBehaviour
 {
-    [SerializeField] private CastlesSpawner _castlesSpawner;
     [SerializeField] private List<Castle> _castles = new List<Castle>();
     
-    public event System.Action<Castle> CastleCreated;
+    public event Action<Castle> CastleCreated;
+    public event Action<Vector3, Action<Castle>> CastleSpawnRequested;
     
     public IReadOnlyList<Castle> Castles => _castles.AsReadOnly();
     
@@ -49,22 +49,6 @@ public class CastlesHandler : MonoBehaviour
         return nearestCastle;
     }
     
-    private Castle CreateCastleAtPosition(Vector3 position)
-    {
-        if (_castlesSpawner == null)
-            return null;
-
-        Castle newCastle = _castlesSpawner.SpawnCastle(position);
-        
-        if (newCastle != null)
-        {
-            _castles.Add(newCastle);
-            SubscribeToCastle(newCastle);
-        }
-        
-        return newCastle;
-    }
-    
     private void TransferWorkerToNewCastle(Worker worker, Castle oldCastle, Castle newCastle)
     {
         if (worker == null || newCastle == null)
@@ -73,15 +57,7 @@ public class CastlesHandler : MonoBehaviour
         oldCastle.WorkerHandler.RemoveWorker(worker);
         oldCastle.UnsubscribeFromWorkerEvents(worker);
         worker.SetAsFree();
-        
-        if (newCastle.WorkerHandler.WorkersSpawner != null)
-        {
-            SpawnPoint spawnPoint = newCastle.WorkerHandler.WorkersSpawner.GetRandomSpawnPoint();
-            
-            if (spawnPoint != null)
-                worker.transform.position = spawnPoint.transform.position;
-        }
-        
+        newCastle.SetWorkerToSpawnPoint(worker);
         newCastle.WorkerHandler.AddWorker(worker);
         newCastle.SubscribeToWorkerEvents(worker);
     }
@@ -104,12 +80,11 @@ public class CastlesHandler : MonoBehaviour
     
     private void OnCastleCreationRequested(Castle sourceCastle, Worker worker, Vector3 position)
     {
-        Castle newCastle = CreateCastleAtPosition(position);
-        
-        if (newCastle != null)
+        CastleSpawnRequested?.Invoke(position, (newCastle) =>
         {
-            CastleCreated?.Invoke(newCastle);
             TransferWorkerToNewCastle(worker, sourceCastle, newCastle);
-        }
+            _castles.Add(newCastle);
+            CastleCreated?.Invoke(newCastle);
+        });
     }
 }

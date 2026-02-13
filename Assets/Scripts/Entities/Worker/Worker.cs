@@ -55,7 +55,7 @@ public class Worker : MonoBehaviour
         {
             _mover.TargetReached -= OnMoveCompleted;
             _isSubscribedToMover = false;
-        }
+        } 
     }
     
     private void MoveToTarget(ITargetable target)

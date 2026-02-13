@@ -2,11 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(GoldsSpawner))]
 public class GoldHandler : MonoBehaviour
 {
-    [SerializeField] private GoldsSpawner _goldsSpawner;
-    
     private List<Gold> _availableGolds = new List<Gold>();
     private List<Gold> _assignedGolds = new List<Gold>(); 
     
@@ -14,15 +11,7 @@ public class GoldHandler : MonoBehaviour
     public event Action<Gold> GoldAssigned;
     public event Action<Gold> GoldReleased;
     public event Action<Gold> GoldCollected; 
-
-    public GoldsSpawner GoldsSpawner => _goldsSpawner;
-
-    private void Awake()
-    {
-        if (_goldsSpawner == null)
-            _goldsSpawner = GetComponent<GoldsSpawner>();
-    }
-
+    
     public bool TryAddGold(Gold gold)
     {
         if (gold == null)
@@ -85,8 +74,5 @@ public class GoldHandler : MonoBehaviour
             _assignedGolds.Remove(gold);
 
         GoldCollected?.Invoke(gold);
-        
-        if (_goldsSpawner != null)
-            _goldsSpawner.ReturnToPool(gold);
     }
 }

@@ -14,6 +14,7 @@ public class Castle : MonoBehaviour, ITargetable
     [SerializeField] private Scanner _scanner;
     [SerializeField] private Storage _storage;
     [SerializeField] private WorkerHandler _workerHandler;
+    [SerializeField] private WorkersSpawner _workersSpawner;
     [SerializeField] private int _castleCost = 5;
 
     private CastleRenderer _castleRenderer;
@@ -29,6 +30,7 @@ public class Castle : MonoBehaviour, ITargetable
     public Scanner Scanner => _scanner;
     public Storage Storage => _storage;
     public WorkerHandler WorkerHandler => _workerHandler;
+    public WorkersSpawner WorkersSpawner => _workersSpawner;
     public bool IsSelected { get; private set; }
     
     protected void Awake()
@@ -48,6 +50,9 @@ public class Castle : MonoBehaviour, ITargetable
         
         foreach (Worker worker in _workerHandler.Workers)
             SubscribeToWorkerEvents(worker);
+        
+        if (_workersSpawner != null)
+            _workerHandler.WorkerSpawnRequested += _workersSpawner.OnWorkerSpawnRequested;
     }
     
     private void OnEnable()
@@ -61,6 +66,9 @@ public class Castle : MonoBehaviour, ITargetable
         
         foreach (Worker worker in _workerHandler.Workers)
             UnsubscribeFromWorkerEvents(worker);
+        
+        if (_workersSpawner != null)
+            _workerHandler.WorkerSpawnRequested -= _workersSpawner.OnWorkerSpawnRequested;
     }
     
     public void Select()
@@ -113,6 +121,17 @@ public class Castle : MonoBehaviour, ITargetable
         
         return true;
     }
+    
+    public void SetWorkerToSpawnPoint(Worker worker)
+    {
+        if (worker == null) 
+            return;
+        
+        if (_workersSpawner != null && _workersSpawner.SpawnPoint != null)
+            worker.transform.position = _workersSpawner.SpawnPoint.transform.position;
+        else
+            worker.transform.position = transform.position;
+    }
 
     public void SubscribeToWorkerEvents(Worker worker)
     {
@@ -146,13 +165,7 @@ public class Castle : MonoBehaviour, ITargetable
     private void SpawnNewWorker(int cost)
     {
         _storage.SpendGold(cost);
-    
-        if (_workerHandler.WorkersSpawner != null)
-        {
-            Worker newWorker = _workerHandler.WorkersSpawner.SpawnWorker();
-            _workerHandler.AddWorker(newWorker);
-            SubscribeToWorkerEvents(newWorker);
-        }
+        _workerHandler.RequestSpawnWorker(this);
     }
     
     private void TryCreateCastle()
@@ -193,7 +206,7 @@ public class Castle : MonoBehaviour, ITargetable
 
             _flagHandler.RemoveFlag();
             worker.SetAsFree();
-            _workerHandler.ReturnWorker(worker);
+            _workerHandler.ReleaseWorker(worker);
             _isBuildCostPaid = false;
             _builder = null;
             _state = State.Normal;

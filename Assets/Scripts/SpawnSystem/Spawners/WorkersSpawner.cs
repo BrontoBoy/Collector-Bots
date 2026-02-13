@@ -1,19 +1,31 @@
 using UnityEngine;
 
-public class WorkersSpawner : Spawner<Worker>
+public class WorkersSpawner : MonoBehaviour
 {
-    [SerializeField] private Worker _workerPrefab;
+    [SerializeField] private WorkerFactory _workerFactory;
+    [SerializeField] private SpawnPoint _spawnPoint; 
 
+    public SpawnPoint SpawnPoint => _spawnPoint;
+    
     public Worker SpawnWorker()
     {
-        SpawnPoint spawnPoint = GetRandomSpawnPoint();
-        
-        if (spawnPoint == null || _workerPrefab == null)
+        if (_workerFactory == null)
             return null;
 
-        Worker worker = CreateInstance(_workerPrefab);
-        worker.transform.position = spawnPoint.transform.position;
+        if (_spawnPoint == null)
+            return null;
+
+        return _workerFactory.Create(_spawnPoint.transform.position);
+    }
+    
+    public void OnWorkerSpawnRequested(Castle castle)
+    {
+        Worker newWorker = SpawnWorker();
         
-        return worker;
+        if (newWorker != null && castle != null)
+        {
+            castle.WorkerHandler.AddWorker(newWorker);
+            castle.SubscribeToWorkerEvents(newWorker);
+        }
     }
 }

@@ -1315,7 +1315,8 @@ PrefabInstance:
     - {fileID: 0}
     - {fileID: -1991604537855534230, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
     - {fileID: 0}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3276219873034344927, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
@@ -3605,6 +3606,8 @@ GameObject:
   - component: {fileID: 625859679}
   - component: {fileID: 625859680}
   - component: {fileID: 625859681}
+  - component: {fileID: 625859683}
+  - component: {fileID: 625859682}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -3626,6 +3629,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game
   _goldHandler: {fileID: 625859676}
   _castlesHandler: {fileID: 625859679}
+  _goldsSpawner: {fileID: 625859677}
+  _castlesSpawner: {fileID: 625859680}
 --- !u!114 &625859674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3672,7 +3677,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e75141ef5ff3e104bae9bdee79c6bc41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceHandler
-  _goldsSpawner: {fileID: 625859677}
 --- !u!114 &625859677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3685,7 +3689,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871a14ab348210a49b4fba8bb3acd646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoldsSpawner
-  SpawnPoints:
+  _goldFactory: {fileID: 625859682}
+  _spawnPoints:
   - {fileID: 5046245557263983631}
   - {fileID: 1436549201}
   - {fileID: 1638964992}
@@ -3846,8 +3851,6 @@ MonoBehaviour:
   - {fileID: 386318114}
   - {fileID: 1709411066}
   - {fileID: 569068864}
-  Pool: {fileID: 625859678}
-  _goldPrefab: {fileID: -3386651264075550019, guid: 4d07f33428d0c20498e6aec02eeed599, type: 3}
   _delay: 0.25
 --- !u!114 &625859678
 MonoBehaviour:
@@ -3876,7 +3879,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 491a80e6735d18b4ca83119f49e83f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CastlesHandler
-  _castlesSpawner: {fileID: 625859680}
   _castles:
   - {fileID: 1582900771}
 --- !u!114 &625859680
@@ -3891,8 +3893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50458c2041319d740b9972fa3f6f9fa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CastlesSpawner
-  SpawnPoints: []
-  _castlePrefab: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
+  _castleFactory: {fileID: 625859683}
 --- !u!114 &625859681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3905,6 +3906,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50fc665572f04a941bda717511781dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputHandler
+--- !u!114 &625859682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625859672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfab36854193f1f4183be3149f6c8cdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoldFactory
+  Prefab: {fileID: -3386651264075550019, guid: 4d07f33428d0c20498e6aec02eeed599, type: 3}
+  _goldsPool: {fileID: 625859678}
+--- !u!114 &625859683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625859672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a41401ab71d264f81d8654737d201e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CastleFactory
+  Prefab: {fileID: 2853740541954185478, guid: ac852d4ccaa21594bb356aef000766e3, type: 3}
 --- !u!1001 &626641078
 PrefabInstance:
   m_ObjectHideFlags: 0

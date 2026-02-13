@@ -1,26 +1,25 @@
 using UnityEngine;
 
-[RequireComponent(typeof(FlagsSpawner))]
 public class FlagHandler : MonoBehaviour
 {
-    private FlagsSpawner _flagsSpawner;
-    
+    private FlagFactory _flagFactory;
+
     public bool HasFlag { get; private set; }
     public Flag Flag { get; private set; }
 
     private void Awake()
     {
-        _flagsSpawner = GetComponent<FlagsSpawner>();
+        _flagFactory = GetComponent<FlagFactory>();
     }
 
     public void PlaceFlag(Vector3 position)
     {
-        if (_flagsSpawner == null)
+        if (_flagFactory == null)
             return;
 
         if (HasFlag == false)
         {
-            Flag = _flagsSpawner.SpawnAtPosition(position);
+            Flag = _flagFactory.Create(position);
             HasFlag = true;
         }
         else if (Flag != null)
@@ -31,9 +30,9 @@ public class FlagHandler : MonoBehaviour
 
     public void RemoveFlag()
     {
-        if (HasFlag && Flag != null)
+        if (HasFlag)
         {
-            _flagsSpawner.ReturnToPool(Flag);
+            _flagFactory.Release(Flag);
             Flag = null;
             HasFlag = false;
         }

@@ -519,10 +519,13 @@ PrefabInstance:
       addedObject: {fileID: 5333687654772219991}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5437560472112568178}
+      addedObject: {fileID: -7665329444627832900}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -7665329444627832900}
+      addedObject: {fileID: 8035377600242954835}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4511993270331746378}
   m_SourcePrefab: {fileID: 100100000, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
 --- !u!1 &36520885302736437 stripped
 GameObject:
@@ -544,6 +547,7 @@ MonoBehaviour:
   _scanner: {fileID: -2933456717488768549}
   _storage: {fileID: 4285559579816868935}
   _workerHandler: {fileID: 4326686867069659144}
+  _workersSpawner: {fileID: 8127162525989088129}
   _castleCost: 5
 --- !u!114 &-2933456717488768549
 MonoBehaviour:
@@ -587,7 +591,6 @@ MonoBehaviour:
   _workers: []
   _workerCost: 3
   _maxWorkers: 10
-  _workersSpawner: {fileID: 8127162525989088129}
 --- !u!65 &7161867849411361
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -621,9 +624,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2635ed5d7f09f9d448b28534c87f74de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitsSpawner
-  SpawnPoints:
-  - {fileID: 6648059405759311058}
-  _workerPrefab: {fileID: 3905642969416679853, guid: 0731ab68777ccc8498cd144d984d6bc4, type: 3}
+  _workerFactory: {fileID: 4511993270331746378}
+  _spawnPoint: {fileID: 6648059405759311058}
 --- !u!114 &5636140376528142106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -650,21 +652,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33ddab51204f942a28d318609a40aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlagHandler
---- !u!114 &5437560472112568178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 36520885302736437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dc8ffe656a615043a5a822b2252bab0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MarkersSpawner
-  SpawnPoints: []
-  Pool: {fileID: -7665329444627832900}
-  _flagPrefab: {fileID: -8179781346430652744, guid: 952c1d297b444524c9c6460f6f3e82a7, type: 3}
 --- !u!114 &-7665329444627832900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -680,6 +667,33 @@ MonoBehaviour:
   Prefab: {fileID: -8179781346430652744, guid: 952c1d297b444524c9c6460f6f3e82a7, type: 3}
   PoolCapacity: 15
   MaxPoolCapacity: 100
+--- !u!114 &8035377600242954835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36520885302736437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a580f4841d9ced444b35933167b50b06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlagFactory
+  Prefab: {fileID: -8179781346430652744, guid: 952c1d297b444524c9c6460f6f3e82a7, type: 3}
+  _flagsPool: {fileID: -7665329444627832900}
+--- !u!114 &4511993270331746378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36520885302736437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44482539f3093c48877a85c1773eb71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorkerFactory
+  Prefab: {fileID: 3905642969416679853, guid: 0731ab68777ccc8498cd144d984d6bc4, type: 3}
 --- !u!4 &849613669953858703 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: aee4daf4ee90331409ff98778ce747c8, type: 3}
